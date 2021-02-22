@@ -1,0 +1,204 @@
+#conversejs {
+    .chatbox {
+        img.emoji {
+            height: 1.2em;
+            width: 1.2em;
+            margin: 0 .05em 0 .1em;
+            vertical-align: -0.1em;
+        }
+
+        .sendXMPPMessage {
+            .toggle-smiley {
+                a.toggle-smiley {
+                    padding: 0;
+                }
+            }
+        }
+
+        .emoji-picker.toolbar-menu {
+            width: 100%;
+            padding-top: 0;
+            padding-bottom: 0;
+            background-color: var(--chat-head-color);
+            overflow-y: hidden;
+            background: white;
+            .emoji-picker__lists {
+                height: 8em;
+                overflow-y: auto;
+                .emoji-category__heading {
+                    cursor: auto;
+                    color: var(--subdued-color);
+                    font-size: var(--font-size);
+                    margin: 0;
+                    padding: 0.75em 0 0 0.5em;
+                }
+                .emoji-picker {
+                    li {
+                        float: left;
+                    }
+                }
+                display: flex;
+                flex-direction: column;
+            }
+            .emoji-skintone-picker {
+                display: flex;
+                label {
+                    margin: 0;
+                    padding: 0 0.5em;
+                    white-space: nowrap;
+                    font-size: var(--font-size-small);
+                    color: var(--heading-color);
+                }
+                ul {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    li {
+                        padding: 0 0.25em;
+                    }
+                }
+                padding: 0.5em 0;
+                background-color: var(--chat-head-color);
+                width: auto;
+                font-size: var(--font-size);
+            }
+            .emoji-picker {
+                background-color: white;
+                padding: 0.5em 0 0 0.5em;
+                &:last-child {
+                    padding-bottom: 0.5em;
+                }
+                li {
+                    margin-left: 0;
+                    cursor: pointer;
+                    list-style: none;
+                    position: relative;
+                    &.insert-emoji {
+                        margin: 0;
+                        height: 30px;
+                        width: 32px;
+                        &.selected a {
+                            background-color: var(--highlight-color);
+                        }
+                        a {
+                            padding: 3px;
+                            font-size: var(--font-size-huge);
+                            &:hover {
+                                background-color: var(--highlight-color);
+                            }
+                        }
+                    }
+                }
+            }
+            .emoji-picker__header {
+                display: flex;
+                flex-direction: column;
+                padding-top: 0.5em;
+                background-color: var(--chat-head-color);
+                .emoji-search {
+                    width: auto;
+                    margin: 0.25em;
+                    height: 2em;
+                    font-size: var(--font-size-small);
+                }
+                ul {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+
+                    .emoji-category {
+                        padding: 0.25em 0;
+                        font-size: var(--font-size-huge);
+                        &.picked {
+                            background-color: white;
+                            border: 1px var(--chat-head-color) solid;
+                            border-bottom: none;
+                        }
+                        &.selected a, &:hover a {
+                            background-color: var(--highlight-color);
+                        }
+                        a {
+                            padding: 0.25em;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .chatroom {
+        .emoji-picker.toolbar-menu {
+            background-color: var(--chatroom-head-color);
+            background: white;
+            .emoji-skintone-picker {
+                background-color: var(--chatroom-head-color);
+            }
+            .emoji-picker__header {
+                background-color: var(--chatroom-head-color);
+                ul {
+                    .emoji-category {
+                        &.picked {
+                            border: 1px var(--chatroom-head-color) solid;
+                            border-bottom: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+#conversejs.converse-overlayed  {
+    .chatbox {
+        .emoji-picker.toolbar-menu {
+            li {
+                &.insert-emoji {
+                    height: 20px;
+                    width: 20px;
+                }
+            }
+            .emoji-picker {
+                .insert-emoji {
+                    a {
+                        font-size: var(--font-size);
+                    }
+                }
+            }
+            .emoji-skintone-picker {
+                font-size: var(--font-size-small);
+            }
+            .emoji-picker__header {
+                .emoji-category {
+                    font-size: var(--font-size-small);
+                }
+            }
+            .emoji-picker__lists {
+                height: 7em;
+            }
+        }
+    }
+}
+
+#conversejs.converse-fullscreen {
+    .chatbox {
+        .toggle-smiley {
+        }
+        .emoji-picker.toolbar-menu {
+            .emoji-picker__lists {
+                height: 12em;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(m) {
+    #conversejs {
+        .chatbox {
+            .emoji-picker.toolbar-menu {
+                max-width: 40em;
+            }
+        }
+    }
+}
+

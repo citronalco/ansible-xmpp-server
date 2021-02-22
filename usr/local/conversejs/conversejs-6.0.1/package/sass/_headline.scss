@@ -1,0 +1,41 @@
+#conversejs {
+    .chat-head-headline {
+        background-color: var(--headline-head-color);
+    }
+
+    .chatbox.headlines {
+        .chat-head {
+            &.chat-head-chatbox {
+                background-color: var(--headline-head-color);
+            }
+        }
+        .chat-body {
+            background-color: var(--headline-head-color);
+            border-radius: var(--chatbox-border-radius);
+            .chat-message {
+                color: var(--headline-message-color);
+            }
+        }
+        .chat-content {
+            height: 100%;
+        }
+    }
+}
+
+#conversejs.converse-fullscreen {
+    .chatbox.headlines {
+        .box-flyout {
+            background-color: var(--headline-head-color);
+        }
+        .chat-head {
+            &.chat-head-chatbox {
+                background-color: var(--headline-head-color);
+            }
+        }
+        .flyout {
+            border: var(--flyout-padding) solid var(--headline-head-color);
+            border-top: 0.8em solid var(--headline-head-color);
+        }
+    }
+}
+
