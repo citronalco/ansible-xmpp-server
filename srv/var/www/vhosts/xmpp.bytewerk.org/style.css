@@ -59,6 +59,11 @@ a:hover, a:active {
 	background-color: #e7e7df;
 }
 
+#about {
+	flex: 47%;
+	background-color: #e7e7df;
+}
+
 @media (max-width: 800px) {
 	main {
 		margin: 0.2em;
