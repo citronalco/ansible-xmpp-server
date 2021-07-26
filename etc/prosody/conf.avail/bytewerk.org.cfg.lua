@@ -39,7 +39,7 @@ Component "conference.bytewerk.org" "muc"
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
 Component "proxy.bytewerk.org" "proxy65"
-	-- proxy65_acl = { "bytewerk.org" };
+	-- proxy65_acl = { "bytewerk.org" }; -- do NOT set, would only allow proxy65 usage between users from the defined domains
 
 
 -- PubSub ("Publish-Subscribe") [XEP-0060]

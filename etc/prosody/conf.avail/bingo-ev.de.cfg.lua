@@ -41,7 +41,7 @@ Component "conference.bingo-ev.de" "muc"
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
 Component "proxy65.bingo-ev.de" "proxy65"
-	-- proxy65_acl = { "bingo-ev.de" };
+	-- proxy65_acl = { "bingo-ev.de" }; -- do NOT set, would only allow proxy65 usage between users from the defined domains
 
 
 -- PubSub ("Publish-Subscribe") [XEP-0060]
