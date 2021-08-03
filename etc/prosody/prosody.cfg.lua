@@ -152,7 +152,7 @@ limit_auth_max = 5; -- ...tolerate no more than 5 failed authentication attempts
 
 -- WebRTC/Jingle support - either use mod_turncredentials OR mod_external_services with mod_extdisco
 -- turncredentials_host = "xmpp.bytewerk.org";  -- TURN server URL
--- turncredentials_secret = "njfVWfWs8uuxNzEZ";  -- TURN server shared secret (see /etc/coturn/turnserver.conf)
+-- turncredentials_secret = "TURNSERVERPASSWORD";  -- TURN server shared secret (see /etc/coturn/turnserver.conf)
 external_services = {
 	{
 	    type = "stun",
