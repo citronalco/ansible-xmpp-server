@@ -1,0 +1,16 @@
+- name: Install Coturn
+  zypper:
+    name: "coturn"
+
+- name: Create Coturn configuration
+  template:
+    src: "turnserver.conf.j2"
+    dest: "/etc/coturn/turnserver.conf"
+    group: "coturn"
+    mode: "0640"
+  notify: restart coturn
+
+- name: Enable coturn
+  systemd:
+    name: coturn
+    enabled: yes

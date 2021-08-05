@@ -1,7 +1,0 @@
-# Renew LetsEncrypt Certificates, check weekly
-# After renewal scripts in /etc/letsencrypt/renewal-hooks/post/ get executed to eneble the new certificates in Apache2, Prosody and Coturn
-10 1 * * 0	/usr/bin/certbot renew
-
-# Clean up Prosody upload directory
-15 1 * * *	find /srv/var/prosody-upload/ -type f -mtime +31 -exec rm {} \;
-

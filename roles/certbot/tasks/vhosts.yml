@@ -1,0 +1,27 @@
+- name: Check if certificates do already exist
+  stat:
+    path: /etc/letsencrypt/live/{{ domain[item] }}/cert.pem
+  register: letsencrypt_cert_stat
+  with_items:
+    - "muc"
+    - "proxy65"
+    - "pubsub"
+    - "upload"
+
+- name: Stop Apache2 to allow certbot to generate a cert
+  service:
+    name: "apache2"
+    state: stopped
+  when: not ansible_check_mode and letsencrypt_cert_stat.results | selectattr('stat.exists','equalto', false) | list | count > 0
+  notify: restart apache2
+
+- name: Generate new certificate
+#  command: echo /usr/bin/certbot certonly --standalone --noninteractive --agree-tos --email {{ prosody.web_domain.admin_email }} -d {{ domain[item] }}
+  command: /usr/bin/certbot certonly --standalone --noninteractive --agree-tos --email {{ prosody.web_domain.admin_email }} -d {{ domain[item] }}
+  args:
+    creates: /etc/letsencrypt/live/{{ domain[item] }}/cert.pem
+  with_items:
+    - "muc"
+    - "proxy65"
+    - "pubsub"
+    - "upload"

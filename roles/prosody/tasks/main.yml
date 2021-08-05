@@ -1,0 +1,179 @@
+- name: Create target directory for Converse.js
+  file:
+    path: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+    state: directory
+    mode: "0755"
+
+- name: Retrieve list of Converse.js releases
+  uri:
+    url: "https://api.github.com/repos/conversejs/converse.js/releases/tags/{{ conversejs.conversejs_release_tag }}"
+    return_content: true
+  register: conversejs_releases_json
+  check_mode: false
+
+- name: Download and uncompress Converse.js
+  unarchive:
+    remote_src: true
+    src: "{{ conversejs_releases_json.json.assets | json_query('[*].browser_download_url') | last }}"
+    dest: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+
+- name: Create generic symlink for Converse.js
+  file:
+    src: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+    dest: "/usr/local/conversejs/conversejs"
+    state: link
+
+
+
+- name: Create target directory for libsignal-protocol-javascript
+  file:
+    path: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
+    state: directory
+    mode: "0755"
+
+- name: Retrieve list of libsignal-protocol-javascript tags
+  uri:
+    url: "https://api.github.com/repos/conversejs/libsignal-protocol-javascript/tags"
+    return_content: true
+  register: libsignal_tags_json
+  check_mode: false
+
+- name: Download and uncompress libsignal-protocol-javascript
+  unarchive:
+    remote_src: true
+    src: "{{ libsignal_tags_json.json | selectattr('name', 'equalto', conversejs.libsignal_release_tag) | json_query('[*].zipball_url') | last }}"
+    dest: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
+
+- name: Create generic symlink for libsignal-protocol-javascript
+  file:
+    src: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
+    dest: "/usr/local/conversejs/libsignal-protocol-javascript"
+    state: link
+
+
+
+- name: Install Prosody
+  zypper:
+    name: "prosody"
+  notify: enable prosody
+
+- name: Install Mercurial
+  zypper:
+    name: "{{ item }}"
+  loop:
+    - "mercurial"
+    - "python2-pyOpenSSL"
+
+- name: Install Prosody modules from Prosodys Mercurial repository
+  hg:
+    repo: "https://hg.prosody.im/prosody-modules/"
+    dest: "/usr/local/lib/prosody-modules"
+  notify: restart prosody
+  tags:
+    - skip_ansible_lint
+
+- name: Install update script for Prosody modules
+  copy:
+    src: "update-prosody-modules.sh"
+    dest: "/usr/local/sbin/update-prosody-modules.sh"
+    mode: "0755"
+
+- name: Create directories for XMPP domains
+  file:
+    path: "{{ item }}"
+    state: directory
+    group: "prosody"
+    mode: "0750"
+  loop:
+    - "/etc/prosody/conf.avail"
+    - "/etc/prosody/conf.d"
+
+- name: Create Prosody configuration for XMPP domains
+  template:
+    src: "vhost.cfg.lua.j2"
+    dest: "/etc/prosody/conf.avail/{{ item.name }}.cfg.lua"
+    group: "prosody"
+    mode: "0640"
+  loop: "{{ prosody.xmpp_domains }}"
+  notify: restart prosody
+
+- name: Enable Prosody configuration for XMPP domains
+  file:
+    src: "/etc/prosody/conf.avail/{{ item.name }}.cfg.lua"
+    dest: "/etc/prosody/conf.d/{{ item.name }}.cfg.lua"
+    state: link
+  loop: "{{ prosody.xmpp_domains }}"
+  notify: restart prosody
+
+- name: Create Prosody localhost XMPP domain
+  template:
+    src: "localhost.cfg.lua.j2"
+    dest: "/etc/prosody/conf.avail/localhost.cfg.lua"
+    group: "prosody"
+    mode: "0640"
+  notify: restart prosody
+
+- name: Enable Prosody localhost XMPP domains
+  file:
+    src: "/etc/prosody/conf.avail/localhost.cfg.lua"
+    dest: "/etc/prosody/conf.d/localhost.cfg.lua"
+    state: link
+  notify: restart prosody
+
+- name: Create main Prosody configuration
+  template:
+    src: "prosody.cfg.lua.j2"
+    dest: "/etc/prosody/prosody.cfg.lua"
+    group: "prosody"
+    mode: "0640"
+  notify: restart prosody
+
+- name: Create Prosody sharedGroups files
+  template:
+    src: "sharedGroups.txt.j2"
+    dest: "/etc/prosody/sharedGroups-{{ item.name }}.txt"
+    group: "prosody"
+    mode: "0640"
+  loop: "{{ prosody.xmpp_domains }}"
+  notify: restart prosody
+
+- name: Install PHP file upload script
+  copy:
+    remote_src: true
+    src: "/usr/local/lib/prosody-modules/mod_http_upload_external/share_v2.php"
+    dest: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    mode: "0640"
+    owner: "wwwrun"
+  loop: "{{ prosody.xmpp_domains }}"
+
+- name: Configure PHP file upload script - upload directory
+  lineinfile:
+    path: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    regexp: '^\$CONFIG_STORE_DIR\s*='
+    line: "$CONFIG_STORE_DIR = '/srv/var/prosody-upload/{{ item.name }}';"
+  loop: "{{ prosody.xmpp_domains }}"
+
+- name: Configure PHP file upload script - shared secret
+  lineinfile:
+    path: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    regexp: '^\$CONFIG_SECRET\s*='
+    line: "$CONFIG_SECRET = '{{ uploadpwd[item.name] }}';"
+  loop: "{{ prosody.xmpp_domains }}"
+
+- name: Set up cronjob to delete uploaded files
+  cron:
+    name: "Clean up Prosody upload directory"
+    job: "/usr/bin/find /srv/var/prosody-upload/ -type f -mtime +{{ prosody.delete_uploads_after_days | default(365) }} -exec rm {}\\ ;"
+    minute: "15"
+    hour: "1"
+
+- name: Configure Logrotate
+  copy:
+    src: logrotate
+    dest: /etc/logrotate.d/prosody
+    mode: "0644"
+
+- name: Enable Prosody
+  systemd:
+    name: prosody
+    enabled: yes

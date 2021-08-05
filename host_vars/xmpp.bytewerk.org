@@ -1,0 +1,89 @@
+# Optional
+#postgresql:
+#  databasename: prosody
+#  username: prosody
+#  password: 5xyfq6gilJvtBJMiQt4L90X2e
+
+
+prosody:
+
+
+  # Optional: Aufbewahrungsdauer für Nachrichten und Uploads einschränken, Standard: 365
+  delete_uploads_after_days: 31
+  delete_messages_after_days: 31
+
+  # Optional, nur nötig wenn bei einer xmpp_domain "authentication_provider = imap" gesetzt wird
+  imap_auth:
+    host: mail.bingo-ev.de
+    port: 993
+
+
+  web_domain:
+    name: "xmpp.bytewerk.org"
+    admin_email: "webmaster@bingo-ev.de"
+    content_git:	# optional
+      url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
+      branch: master
+
+  xmpp_domains:
+    - name: "bytewerk.org"
+      muc: "conference.bytewerk.org"
+      proxy65: "proxy.bytewerk.org"
+      pubsub: "pubsub.bytewerk.org"
+      upload: "upload.bytewerk.org"
+      legacy_ssl_port: 5223
+      allow_registration: false	# Optional, Standard: false
+      admin_jids:
+        - sqozz@bytewerk.org
+        - cfr34k@bytewerk.org
+        - geierb@jabber.geierb.de
+        - bg3992@bingo-ev.de
+        - bytewerk-admin-account@example.com
+      contact:
+        abuse:
+          - "https://bingo-ev.de"
+          - "foobar@example.com"
+        admin:
+          - "https://bingo-ev.de"
+      conversejs:
+        weblocation: /conversejs-bytewerk
+      groups:	# Optional
+        bytewerk:
+          - neal@bytewerk.org=neal@bytewerk.org
+          - cfr34k@bytewerk.org=cfr34k
+          - hk@bytewerk.org=hk
+          - cri-kee@bytewerk.org=cri-kee
+          - sqozz@bytewerk.org=sqozz
+          - struppi@bytewerk.org=struppi
+          - funkyfred@bytewerk.org=funkyfred
+          - richi@bytewerk.org=richi
+          - xor@bytewerk.org=xor
+          - fusselkater@bytewerk.org=fusselkater
+          - unbekanntes_pferd@bytewerk.org=iugwhefiluhwliuefh
+
+    - name: "bingo-ev.de"
+      muc: "conference.bingo-ev.de"
+      proxy65: "proxy65.bingo-ev.de"
+      pubsub: "pubsub.bingo-ev.de"
+      upload: "upload.bingo-ev.de"
+      authentication_provider: imap
+      legacy_ssl_port: 5225
+      admin_jids:
+        - sqozz@bytewerk.org
+        - cfr34k@bytewerk.org
+        - geierb@jabber.geierb.de
+        - bg3992@bingo-ev.de
+      contact:
+        abuse:
+          - "https://bingo-ev.de"
+        admin:
+          - "https://bingo-ev.de"
+      conversejs:
+        weblocation: /conversejs-bingo
+
+conversejs:
+  conversejs_release_tag: v6.0.1
+  libsignal_release_tag: v1.3.0
+
+
+ansible_python_interpreter: /usr/bin/python3

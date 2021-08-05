@@ -1,0 +1,14 @@
+# Ansible managed
+
+/var/log/prosody/prosody.log /var/log/prosody/prosody.err {
+        weekly
+        rotate 2
+        compress
+        delaycompress
+        create 640 prosody adm
+        postrotate
+                /bin/systemctl --quiet is-active prosody.service && /usr/bin/prosodyctl reload
+        endscript
+        sharedscripts
+        missingok
+}

@@ -1,0 +1,84 @@
+- name: Install Apache2 and PHP
+  zypper:
+    name: "apache2"
+
+- name: Install Apache2-Mod-PHP
+  zypper:
+    name: "apache2-mod_php7"
+  notify: restart apache2
+
+- name: Enable required Apache2 modules
+  apache2_module:
+    name: "{{ item }}"
+  loop:
+    - "rewrite"
+    - "headers"
+    - "proxy"
+    - "proxy_wstunnel"
+    - "php7"
+  notify: restart apache2
+
+- name: Explicitly set HTTP servername
+  template:
+    src: "servername.j2"
+    dest: "/etc/apache2/vhosts.d/01-set-servername.conf"
+    mode: "0644"
+  notify: restart apache2
+
+- name: Create common web vHost configuration
+  template:
+    src: "vhost-web.j2"
+    dest: "/etc/apache2/vhosts.d/{{ prosody.web_domain.name }}.conf"
+    mode: "0644"
+  notify: restart apache2
+
+- name: Create vHost configurations for XMPP components
+  include_tasks: vhosts.yml
+  loop: "{{ prosody.xmpp_domains }}"
+  loop_control:
+    loop_var: domain
+
+- name: Create directories for Prosody file uploads
+  file:
+    path: "/srv/var/prosody-upload/{{ item.name }}"
+    state: directory
+    owner: wwwrun
+    mode: "0770"
+
+  loop: "{{ prosody.xmpp_domains }}"
+
+- name: Install dependencies for AnonIP
+  zypper:
+    name: ['git' ]
+
+- name: Clone github repo for AnonIP
+  git:
+    repo: "https://github.com/DigitaleGesellschaft/Anonip.git"
+    dest: "/usr/local/Anonip.git"
+    clone: yes
+    update: yes
+  notify: restart apache2
+  tags:
+    - skip_ansible_lint
+
+- name: Mark AnonIP python script as executable
+  file:
+    dest: /usr/local/Anonip.git/anonip.py
+    mode: "0755"
+
+- name: Enable Apache2
+  systemd:
+    name: apache2
+    enabled: yes
+
+- name: Clone website content
+  git:
+    repo: "{{ prosody.web_domain.content_git.url }}"
+    version: "{{ prosody.web_domain.content_git.branch | default('master') }}"
+    dest: "/srv/var/www/vhosts/{{ prosody.web_domain.name }}/"
+    clone: yes
+    update: yes
+  tags:
+    - skip_ansible_lint
+  when: prosody.web_domain.content_git.url is defined and prosody.web_domain.content_git.branch is defined
+

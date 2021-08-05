@@ -1,0 +1,8 @@
+- conversejs ist seltsam installiert: dist, sounds,...??? kann mir nicht vorstellen dass mein workaround echt nötig ist - oder ist das nur wegen der prosody-conversjs-config?
+- zertifikate nach erstmaligem erstellen kopieren (geht NICHT über renewal-hooks!)
+- dns ausgeben, oder in's readme schreiben
+- coturn auf 443, extra hostnamen beantragen -> Suse-Version zu alt -> nein, sollte gehen
+- Readme: Was mit bingo-ev.de und bytewerk.org-Zertifikat machen?
+- host_vars dokumentieren
+
+-> backup/snapshot, testen

@@ -1,0 +1,53 @@
+# Coturn
+- name: Create random shared TURN password
+  set_fact:
+    turnpwd: "{{ lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16') }}"
+
+- name: Retrieve current shared TURN password
+  shell: /usr/bin/grep -s ^static-auth-secret "/etc/coturn/turnserver.conf" | /usr/bin/sed 's/.*=\(.*\).*/\1/'
+  register: turnpwd_current
+  check_mode: false
+  changed_when: false
+  tags:
+    - skip_ansible_lint
+
+- name: Store current TURN password
+  set_fact:
+    turnpwd: "{{ turnpwd_current.stdout }}"
+  when: turnpwd_current.stdout | length > 0
+
+
+# Postgres
+- name: Retrieve current Postgresql password
+  shell: /usr/bin/awk '/^sql/,/}/' /etc/prosody/prosody.cfg.lua | /usr/bin/grep -s password | /usr/bin/sed 's/.*password\s*=\s*\"\(.*\)\".*/\1/'
+  register: pgpwd_current
+  check_mode: false
+  changed_when: false
+  tags:
+    - skip_ansible_lint
+
+- name: Either use Postgresql password from host_vars, the current one or a new random one
+  set_fact:
+    pgpwd: "{{ postgresql.password | default((pgpwd_current.stdout | length > 0) | ternary(pgpwd_current.stdout, lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16'))) }}"
+
+
+# Prosody
+- name: Create random shared upload passwords
+  set_fact:
+    uploadpwd: "{{ uploadpwd | default({}) | combine( { item.name: lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=32') }  ) }}"
+  loop: "{{ prosody.xmpp_domains }}"
+
+- name: Retrieve current shared upload passwords
+  shell: /usr/bin/grep -s http_upload_external_secret "/etc/prosody/conf.d/{{ item.name }}.cfg.lua" | /usr/bin/sed 's/.*\"\(.*\)\".*/\1/'
+  loop: "{{ prosody.xmpp_domains }}"
+  register: uploadpwd_current
+  check_mode: false
+  changed_when: false
+  tags:
+    - skip_ansible_lint
+
+- name: Store current shared upload passwords
+  set_fact:
+    uploadpwd: "{{ uploadpwd | default({}) | combine( { item.item.name: item.stdout }  ) }}"
+  loop: "{{ uploadpwd_current.results }}"
+  when: item.stdout | length > 0

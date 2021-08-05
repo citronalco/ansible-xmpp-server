@@ -1,0 +1,10 @@
+- hosts: xmpp
+  remote_user: root
+
+  roles:
+    - set_passwords
+    - certbot
+    - apache2
+    - coturn
+    - prosody
+    - postgresql

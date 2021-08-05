@@ -1,0 +1,32 @@
+- name: Install Ansible dependencies
+  zypper:
+    name: "python3-psycopg2"
+
+- name: Install postgresql packages
+  zypper:
+    pkg: [ 'postgresql-server', 'postgresql', 'sudo' ]
+  notify: enable postgresql
+
+- name: Enable and run postgresql
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: Create database user
+  become: yes
+  become_user: postgres
+  become_method: sudo
+  postgresql_user:
+    name: "{{ postgresql.username | default('prosody') }}"
+    password: "{{ pgpwd }}"
+    encrypted: true
+    expires: "infinity"
+
+- name: Create database
+  become: yes
+  become_user: postgres
+  become_method: sudo
+  postgresql_db:
+    name: "{{ postgresql.databasename | default('prosody') }}"
+    owner: "{{ postgresql.username | default('prosody') }}"

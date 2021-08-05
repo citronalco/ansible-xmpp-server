@@ -1,0 +1,80 @@
+# {{ ansible_managed }}
+# - LetsEncrypt-Zertifikat für {{ domain[item] }}
+# - mod_upload_external/mod_upload (XEP-0363)
+
+<VirtualHost *:80>
+    ServerName {{ domain[item] }}
+
+    ServerAdmin {{ prosody.web_domain.admin_email }}
+
+    DocumentRoot /srv/var/www/vhosts/{{ domain[item] }}
+
+    # Logging
+    ErrorLog /var/log/apache2/{{ domain[item] }}-error_log
+    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ domain[item] }}-access_log" combined env=!dontlog
+
+    # don't loose time with IP address lookups
+    HostnameLookups Off
+
+    # needed for named virtual hosts
+    UseCanonicalName Off
+
+    # Weiterleiten zu HTTPS
+    RewriteEngine On
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
+</VirtualHost>
+
+
+<VirtualHost *:443>
+    ServerName {{ domain[item] }}
+
+    ServerAdmin {{ prosody.web_domain.admin_email }}
+
+    DocumentRoot /srv/var/www/vhosts/{{ domain[item] }}
+
+    # Logging
+    ErrorLog /var/log/apache2/{{ domain[item] }}-error_log
+    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ domain[item] }}-access_log" combined env=!dontlog
+
+    # don't loose time with IP address lookups
+    HostnameLookups Off
+
+    # needed for named virtual hosts
+    UseCanonicalName Off
+
+    # LetsEncrypt
+    SSLCertificateFile /etc/letsencrypt/live/{{ domain[item] }}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ domain[item] }}/privkey.pem
+    Include /etc/letsencrypt/options-ssl-apache.conf
+
+    ####################################
+
+    # PHP
+    Include /etc/apache2/conf.d/mod_php7.conf
+
+    <Directory /srv/var/www/vhosts/{{ domain[item] }}>
+        Require all granted
+
+        # share.php changes the Headers, SymLinksIfOwnerMatch allows that
+        Options +SymLinksIfOwnerMatch
+
+        # Allow cross site requests - Movim does an OPTION request where share.php cannot set the appropriate Headers
+        SetEnvIf Request_Method "^OPTIONS$" METHOD_OPTIONS
+        Header always set Access-Control-Allow-Origin "*" env=METHOD_OPTIONS
+        Header always set Access-Control-Allow-Headers "Content-Type" env=METHOD_OPTIONS
+        Header always set Access-Control-Allow-Methods "OPTIONS, PUT, GET" env=METHOD_OPTIONS
+
+        <Files *.php>
+            # Für Upload-Skript share_v2.php (aus mod_upload_external)
+            # Ein Upload darf max. eine Stunde dauern
+            php_value max_input_time 3600
+            php_value max_execution_time 3600
+        </Files>
+
+        # modify status code of preflight request
+        RewriteEngine On
+        RewriteCond %{REQUEST_METHOD} OPTIONS
+        RewriteRule ^(.*)$ $1 [R=200,L]
+    </Directory>
+</VirtualHost>
