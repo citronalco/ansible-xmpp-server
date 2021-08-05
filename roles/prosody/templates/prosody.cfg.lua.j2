@@ -157,6 +157,13 @@ external_services = {
 	    transport = "udp",
 	    port = 3478,
 	    secret = "{{ turnpwd }}"
+	},
+	{
+	    type = "turns",
+	    host = "{{ prosody.web_domain.name }}",
+	    transport = "tcp",
+	    port = 5349,
+	    secret = "{{ turnpwd }}"
 	}
 }
 
