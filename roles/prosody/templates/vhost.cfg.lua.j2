@@ -15,8 +15,9 @@ groups_file = "/etc/prosody/sharedGroups-{{ item.name }}.txt"
 
 -- mod_server_contact_info: public contact addresses for abuse handling (default: empty)
 contact_info = {
-       abuse = { {{ item.contact.abuse | default([]) | map("to_json") | join(", ") }} },
-       admin = { {{ item.contact.admin | default([]) | map("to_json") | join(", ") }} }
+	abuse = { {{ item.admin_jids | default([]) | map('regex_replace', '^', 'xmpp:') | map("to_json") | join(", ") }} },
+	admin = { {{ item.admin_jids | default([]) | map('regex_replace', '^', 'xmpp:') | map("to_json") | join(", ") }} },
+	support = { "https://{{ prosody.web_domain.name }}/" }
 };
 
 -- Authentication method
@@ -42,8 +43,8 @@ conversejs_options = {
 	muc_domain = "{{ item.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
 }
 conversejs_tags = {
-        -- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
-        [[<script src="https://{{ prosody.web_domain.name }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
+	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
+	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
 }
 
 
