@@ -9,8 +9,6 @@ alt-listening-port=3479
 
 tls-listening-port=5349
 alt-tls-listening-port=5350
-
-# TLS configuration - not required, but we have the certificate, so why not
 cert=/etc/pki/coturn/xmpp.bytewerk.org/fullchain.pem
 pkey=/etc/pki/coturn/xmpp.bytewerk.org/privkey.pem
 # https://ssl-config.mozilla.org/#server=haproxy&version=2.1&config=intermediate&openssl=1.1.0g&guideline=5.4
@@ -18,27 +16,28 @@ cipher-list=ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDS
 no-tlsv1
 no-tlsv1_1
 
-# disable connections from multicast addresses
-no-multicast-peers
 # disable command line access
 no-cli
+
+# Allocate Address Family according (DEPRECATED and will be removed in favour of allocation-default-address-family)
+# If enabled then TURN server allocates address family according  the TURN
+# Client <=> Server communication address family.
+# (By default Coturn works according RFC 6156.)
+# !!Warning: Enabling this option breaks RFC6156 section-4.2 (violates use default IPv4)!!
+keep-address-family
 
 # Realm must be set. Its value does not matter when using a shared secret for authentication as we do
 realm={{ prosody.web_domain.name }}
 
 # More security for TURN
 fingerprint
-stale-nonce
-# No Bandwith limit for TURN
-total-quota=100
-bps-capacity=0
 
 # use a shared secret for TURN connections with other programs, must also be set in /etc/prosody/prosody.cfg.lua (STUN does not need authentication)
 use-auth-secret
 static-auth-secret={{ turnpwd }}
 
 # Logging
-#verbose
+verbose
 #Verbose
 log-file=/var/log/coturn/turnserver.log
 simple-log
@@ -48,3 +47,30 @@ simple-log
 # STUN: "stun:{{ prosody.web_domain.name }}:3478", username empty, password empty. Result's last line must contain "srflx".
 # TURN: comment "use-auth-secret" and "static-auth-secret" above, enable a test user by uncommenting the line "user=test:test" below and restart coturn. Then use "turn:{{ prosody.web_domain.name }}:3478", username=test, password=test. Result's last line must contain "relay".
 #user=test:test
+
+# Block connections to IP ranges which shouldn't be reachable
+no-multicast-peers
+no-loopback-peers
+# IPv4 Private-Use
+denied-peer-ip=10.0.0.0-10.255.255.255
+denied-peer-ip=172.16.0.0-172.31.255.255
+denied-peer-ip=192.168.0.0-192.168.255.255
+# Other IPv4 Special-Purpose addresses
+denied-peer-ip=100.64.0.0-100.127.255.255
+denied-peer-ip=169.254.0.0-169.254.255.255
+denied-peer-ip=192.0.0.0-192.0.0.255
+denied-peer-ip=192.0.2.0-192.0.2.255
+denied-peer-ip=198.18.0.0-198.19.255.255
+denied-peer-ip=198.51.100.0-198.51.100.255
+denied-peer-ip=203.0.113.0-203.0.113.255
+# IPv6 Unique-Local
+denied-peer-ip=fc00::-fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+# IPv6 Link-Local Unicast
+denied-peer-ip=fe80::-febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+# Other IPv6 Special-Purpose assignments
+denied-peer-ip=::ffff:0:0-::ffff:ffff:ffff
+denied-peer-ip=64:ff9b::-64:ff9b::ffff:ffff
+denied-peer-ip=64:ff9b:1::-64:ff9b:1:ffff:ffff:ffff:ffff:ffff
+denied-peer-ip=2001::-2001:1ff:ffff:ffff:ffff:ffff:ffff:ffff
+denied-peer-ip=2001:db8::-2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
+denied-peer-ip=2002::-2002:ffff:ffff:ffff:ffff:ffff:ffff:ffff
