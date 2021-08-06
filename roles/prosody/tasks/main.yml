@@ -1,3 +1,4 @@
+# install Converse.js
 - name: Create target directory for Converse.js
   file:
     path: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
@@ -24,34 +25,17 @@
     state: link
 
 
-
-- name: Create target directory for libsignal-protocol-javascript
-  file:
-    path: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
-    state: directory
-    mode: "0755"
-
-- name: Retrieve list of libsignal-protocol-javascript tags
-  uri:
-    url: "https://api.github.com/repos/conversejs/libsignal-protocol-javascript/tags"
-    return_content: true
-  register: libsignal_tags_json
-  check_mode: false
-
-- name: Download and uncompress libsignal-protocol-javascript
-  unarchive:
-    remote_src: true
-    src: "{{ libsignal_tags_json.json | selectattr('name', 'equalto', conversejs.libsignal_release_tag) | json_query('[*].zipball_url') | last }}"
-    dest: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
-
-- name: Create generic symlink for libsignal-protocol-javascript
-  file:
-    src: "/usr/local/conversejs/libsignal-protocol-javascript-{{ conversejs.libsignal_release_tag }}"
+# install OMEMO support for Converse.js
+- name: Download libsignal-protocol-javascript
+  git:
+    repo: https://github.com/conversejs/libsignal-protocol-javascript.git
+    version: "{{ conversejs.libsignal_release_tag }}"
     dest: "/usr/local/conversejs/libsignal-protocol-javascript"
-    state: link
+    clone: yes
+    update: yes
 
 
-
+# Prosody
 - name: Install Prosody
   zypper:
     name: "prosody"
@@ -119,6 +103,15 @@
     dest: "/etc/prosody/conf.d/localhost.cfg.lua"
     state: link
   notify: restart prosody
+
+- name: Create directories for certificates of main XMPP domains
+  file:
+    path: "/etc/prosody/certs/{{ item.name }}"
+    state: directory
+    owner: "prosody"
+    group: "root"
+    mode: "0770"
+  loop: "{{ prosody.xmpp_domains }}"
 
 - name: Create main Prosody configuration
   template:
