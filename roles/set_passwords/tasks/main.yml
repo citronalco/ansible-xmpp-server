@@ -42,9 +42,8 @@
 
 
 # NRPE
-# FIXME
 - name: Try to retrieve current test user passwords
-  shell: /usr/bin/grep -s ^static-auth-secret "/etc/coturn/turnserverX.conf" | /usr/bin/sed 's/.*=\(.*\).*/\1/'
+  shell: grep -s "command\[check_xmpp_{{ item.name }}" /etc/nrpe.d/xmpp-server.cfg | sed 's/.*password \(.*\) -userid.*/\1/'
   loop: "{{ prosody.xmpp_domains }}"
   register: testuserpwd_current
   check_mode: false
@@ -56,7 +55,3 @@
   set_fact:
     testuserpwd: "{{ testuserpwd | default({}) | combine( { item.item.name: (prosody.xmpp_domains | selectattr('name', 'equalto', item.item.name) | selectattr('testuser.password', 'defined') | map(attribute='testuser.password') | first ) | default((item.stdout | length > 0 ) | ternary(item.stdout, lookup('password', '/dev/null chars=ascii_lowercase,ascii_uppercase,digits length=16'))) } ) }}"
   loop: "{{ testuserpwd_current.results }}"
-
-- name: DEBUG
-  debug:
-    msg: "ENDE: {{ testuserpwd }}"

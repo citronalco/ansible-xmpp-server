@@ -32,6 +32,9 @@ realm={{ prosody.web_domain.name }}
 # More security for TURN
 fingerprint
 
+# Support for RFC8018 (mobile clients switching between WLAN and cellular network)
+mobility
+
 # use a shared secret for TURN connections with other programs, must also be set in /etc/prosody/prosody.cfg.lua (STUN does not need authentication)
 use-auth-secret
 static-auth-secret={{ turnpwd }}

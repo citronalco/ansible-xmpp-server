@@ -1,0 +1,46 @@
+# {{ ansible_managed }}
+
+connection_timeout=600
+command_timeout=600
+
+allowed_hosts=127.0.0.1,{{ nrpe.allowed_hosts | default([]) | join(',') }}
+
+# Disk Space
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 15% -c 10% -p /
+
+# systemd Services
+command[check_service_prosody]=/usr/local/nrpe-plugins/check_systemd_service prosody
+command[check_service_postgresql]=/usr/local/nrpe-plugins/check_systemd_service postgresql
+command[check_service_coturn]=/usr/local/nrpe-plugins/check_systemd_service coturn
+command[check_service_apache2]=/usr/local/nrpe-plugins/check_systemd_service apache2
+
+# Processes
+command[check_proc_prosody]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C prosody
+command[check_proc_postgresql]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "postgres: {{ postgresql.databasename | default('prosody') }}"
+command[check_proc_coturn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C turnserver
+command[check_proc_apache2]=/usr/lib/nagios/plugins/check_procs -c 1: -C httpd-prefork
+
+# PostgreSQL Database
+command[check_database]=/usr/local/nrpe-plugins/check_postgres -action=connection -dbname={{ postgresql.databasename | default('prosody') }} -dbuser={{ postgresql.username | default('prosody') }} -dbpass={{ pgpwd }}
+
+# XMPP test user
+{% for domain in prosody.xmpp_domains %}
+{% if domain.testuser is defined %}
+command[check_xmpp_{{ domain.name }}]=/usr/local/nrpe-plugins/check_xmpp -password {{ testuserpwd[domain.name] }} -userid {{ domain.testuser.name }}@{{ domain.name }}
+{% endif %}
+{% endfor %}
+
+# Certificates for legacy SSL
+{% for domain in prosody.xmpp_domains %}
+command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ prosody.web_domain.name }} -p {{ domain.legacy_ssl_port }}
+{% endfor %}
+
+# Certificates for Prosody components
+{% for domain in prosody.xmpp_domains %}
+{% for component in [ 'muc', 'proxy65', 'pubsub', 'upload' ] %}
+command[check_certificate_{{ domain[component] }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ domain[component] }}
+{% endfor %}
+{% endfor %}
+
+# Certificate for web domain
+command[check_certificate_{{ prosody.web_domain.name }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ prosody.web_domain.name }}

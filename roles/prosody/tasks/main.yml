@@ -48,7 +48,7 @@
     - "mercurial"
     - "python2-pyOpenSSL"
 
-- name: Install Prosody modules from Prosodys Mercurial repository
+- name: Install Prosody community modules from Prosodys Mercurial repository
   hg:
     repo: "https://hg.prosody.im/prosody-modules/"
     dest: "/usr/local/lib/prosody-modules"

@@ -4,5 +4,7 @@
 - coturn auf 443, extra hostnamen beantragen -> Suse-Version zu alt -> nein, sollte gehen
 - Readme: Was mit bingo-ev.de und bytewerk.org-Zertifikat machen?
 - host_vars dokumentieren
+- prosody-modules: version wählbar machen
+- log in journald beschränken (siehe https://git.bingo-ev.de/geierb/bytewerk-xmpp-server/-/commit/dd658981e4da507f69a2f8402a2314dd31cc7a9d)
 
--> backup/snapshot, testen
+-> backup/snapshot, testen -> ok

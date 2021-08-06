@@ -8,3 +8,4 @@
     - coturn
     - prosody
     - postgresql
+    - nrpe

@@ -1,0 +1,46 @@
+- name: Install nrpe service
+  zypper:
+    name: "nrpe"
+
+- name: Enable nrpe service
+  systemd:
+    name: "nrpe.service"
+    enabled: yes
+
+- name: Install check_xmpp
+  copy:
+    src: "check_xmpp_linux_x64_v0.1.bin"
+    dest: "/usr/local/nrpe-plugins/check_xmpp"
+    group: "nagios"
+    mode: "0775"
+
+- name: Create XMPP test users
+  command: "/usr/bin/prosodyctl register {{ item.testuser.name }} {{ item.name }} {{ testuserpwd[item.name] }}"
+  loop: "{{ prosody.xmpp_domains }}"
+  when: item.testuser is defined
+
+- name: Install check_systemd_service
+  copy:
+    src: "check_systemd_service"
+    dest: "/usr/local/nrpe-plugins/check_systemd_service"
+    group: "nagios"
+    mode: "0775"
+
+- name: Install check_prosody
+  copy:
+    src: "check_postgres.pl"
+    dest: "/usr/local/nrpe-plugins/check_postgres"
+    group: "nagios"
+    mode: "0775"
+
+- name: Install check_http
+  zypper:
+   name: "monitoring-plugins-http"
+
+- name: Create nrpe configuration
+  template:
+    src: "xmpp-server.cfg.j2"
+    dest: "/etc/nrpe.d/xmpp-server.cfg"
+    mode: "0640"
+    group: "nagios"
+  notify: reload nrpe

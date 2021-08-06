@@ -1,0 +1,4 @@
+- name: reload nrpe
+  service:
+    name: nrpe
+    state: reloaded

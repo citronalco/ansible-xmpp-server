@@ -3,6 +3,11 @@
 #  username: prosody
 #  password: 5xyfq6gilJvtBJMiQt4L90X2e	# wird automatisch ermittelt
 
+
+# Optional. If none is given try to reuse the current one, if that's not possible create a random one
+#turnserver:
+#  shared_password: kjhsd8721hkqhwdXXX
+
 prosody:
   # Optional: Aufbewahrungsdauer für Nachrichten und Uploads einschränken, Standard: 365 Tage
   delete_uploads_after_days: 31
@@ -43,6 +48,10 @@ prosody:
       conversejs:
         weblocation: /conversejs-bytewerk
 
+      testuser:	# Optional
+        name: "nrpe-testuser"
+#        password: "HOSTVARS-BYTEWERK" # Optional (default: random)
+
     - name: "bingo-ev.de"
 
       # Components
@@ -67,10 +76,19 @@ prosody:
       conversejs:
         weblocation: /conversejs-bingo
 
+#      testuser:	# Optional - Testuser funktioniert nur wenn authentication_provider was mit "internal ist"
+#        name: "nrpe-testuser"
+#        password: "HOSTVARS-BINGO" # Optional
+
 
 conversejs:
   conversejs_release_tag: v6.0.1
   libsignal_release_tag: v1.3.0
+
+nrpe:
+  # list hostnames, IPv4 or IPv6 addresses allowed to query the nrpe server
+  allowed_hosts:
+    - www.geierb.de
 
 
 ansible_python_interpreter: /usr/bin/python3

@@ -20,10 +20,10 @@ contact_info = {
 	support = { "https://{{ prosody.web_domain.name }}/" }
 };
 
--- Authentication method
+-- Authentication method (default: internal_hashed)
 authentication = "{{ item.authentication_provider | default("internal_hashed") }}"
 
--- Allow new users to register from within their XMPP client
+-- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap): [XEP-0077]
 allow_registration = {{ item.allow_registration | default("false") }}
 
 
