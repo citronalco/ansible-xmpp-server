@@ -1,11 +1,9 @@
 ; {{ ansible_managed }}
 
-{% if item.groups is defined %}
-{% for group in item.groups %}
-[{{ group }}]
-{% for member in item.groups[group] %}
+{% if item.admin_group is defined %}
+[{{ item.admin_group }}]
+{% for member in item.admin_jids %}
 {{ member }}
 {% endfor %}
 
-{% endfor %}
 {% endif %}

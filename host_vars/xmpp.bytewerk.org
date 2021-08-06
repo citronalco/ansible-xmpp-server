@@ -38,24 +38,10 @@ prosody:
         - cfr34k@bytewerk.org
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
+      admin_group: "bytewerk"	# Optional: Alles Admins automatischer zu dieser Gruppe hinzufügen
 
       conversejs:
         weblocation: /conversejs-bytewerk
-
-      # Optional: User samt Nickname automatisch zu Gruppen hinzufügen
-      groups:
-        bytewerk:
-          - neal@bytewerk.org=neal@bytewerk.org
-          - cfr34k@bytewerk.org=cfr34k
-          - hk@bytewerk.org=hk
-          - cri-kee@bytewerk.org=cri-kee
-          - sqozz@bytewerk.org=sqozz
-          - struppi@bytewerk.org=struppi
-          - funkyfred@bytewerk.org=funkyfred
-          - richi@bytewerk.org=richi
-          - xor@bytewerk.org=xor
-          - fusselkater@bytewerk.org=fusselkater
-
 
     - name: "bingo-ev.de"
 
@@ -76,6 +62,7 @@ prosody:
         - cfr34k@bytewerk.org
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
+      admin_group: "bingo-users"
 
       conversejs:
         weblocation: /conversejs-bingo
