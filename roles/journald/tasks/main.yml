@@ -1,0 +1,6 @@
+- name: Limit journald logging to 14 days
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^[#]?MaxRetentionSec"
+    line: "MaxRetentionSec=14day"
+  notify: restart journald

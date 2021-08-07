@@ -41,6 +41,19 @@
     name: "prosody"
   notify: enable prosody
 
+- name: Create directory for systemd service override
+  file:
+    path: /etc/systemd/system/prosody.service.d
+    state: directory
+    mode: 0755
+
+- name: Install systemd service override to prevent Prosody from starting before network and PostgreSQL are up
+  copy:
+    src: systemd-service-override
+    dest: /etc/systemd/system/prosody.service.d/ansible-xmpp.conf
+  notify:
+    - reread systemd configs
+
 - name: Install Mercurial
   zypper:
     name: "{{ item }}"

@@ -1,0 +1,5 @@
+# Ansible managed
+
+[Unit]
+After=network-online.target postgresql.service
+Requires=network-online.target

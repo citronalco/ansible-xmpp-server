@@ -3,6 +3,7 @@
 
   roles:
     - set_passwords
+    - journald
     - certbot
     - apache2
     - coturn
