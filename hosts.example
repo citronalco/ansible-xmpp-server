@@ -1,0 +1,2 @@
+[xmpp]
+xmpp.server.net		ansible_ssh_host=12.34.56.78
