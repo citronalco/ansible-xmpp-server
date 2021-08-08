@@ -117,7 +117,7 @@ prosody:
   # virtual host on this server offering BOSH, websockets, Converse.js and optionally a web site (see "content_git") for all xmpp_domains
   web_domain:
     name: "xmpp.example.com"
-    admin_email: "webmaster@example.com"		# mail address of webserver admin
+    admin_email: "webmaster@example.com"	# mail address of webserver admin
     content_git:				# optional. If you want https://xmpp.example.net display some content put that in a git repo and set it's URL below.
       url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
       branch: master
@@ -140,9 +140,10 @@ prosody:
       admin_jids:				# list of JIDs that should have admin access
         - admin@foobar.org
         - someone@otherexample.com
-      admin_group: "foobar admins"		# create a chatroom called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
+      admin_group: "foobar admins"		# create a contact group called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
 
       conversejs:
+        auto_list_rooms: true			# automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
         weblocation: /conversejs-foobar		# offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
 
       testuser:					# create a test user for NRPE (optional, default: no testuser)
@@ -167,6 +168,7 @@ prosody:
 
       conversejs:
         weblocation: /conversejs-bingo
+
 
 
 # Converse.js

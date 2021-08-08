@@ -30,17 +30,18 @@ allow_registration = {{ item.allow_registration | default("false") }}
 -- mod_conversejs:
 conversejs_options = {
 	view_mode = "fullscreen";
-	play_sounds = "true";
-	discover_connection_methods = "true"; -- enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
+	play_sounds = true;
+	discover_connection_methods = true; -- enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
 	i18n = "de"; -- language autodetection is flaky (see https://github.com/conversejs/converse.js/issues/2381), force German as default (default: unset -> autodetect)
 	csi_waiting_time = "10"; -- after XX seconds set user status to "inactive" (default: 0 -> never)
 	auto_away = "180"; -- after XX seconds set user status to "away" (default: 0 -> never)
 	auto_xa = "600"; -- after XX seconds set user status to "extended away" (default: 0 -> never)
-	auto_reconnect = "true"; -- on network failures try to reconnect automatically
-	allow_non_roster_messaging = "true"; -- receive message from users not in the roster, like in conversations.im (default: false)
-	allow_chat_pending_contacts = "true"; -- allow users to chat with pending contacts, like in conversations.im (default: false)
-	auto_register_muc_nickname = "true"; -- automatically register user's nickname in MUC (default: false)
+	auto_reconnect = true; -- on network failures try to reconnect automatically
+	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
+	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
+	auto_register_muc_nickname = true; -- automatically register user's nickname in MUC (default: false)
 	muc_domain = "{{ item.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
+	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)

@@ -33,7 +33,6 @@ prosody:
         - cfr34k@bytewerk.org
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
-      admin_group: "bytewerk"		# Alle Admins automatische zu dieser Gruppe hinzufügen
 
       conversejs:
         weblocation: /conversejs-bytewerk
@@ -59,13 +58,9 @@ prosody:
         - cfr34k@bytewerk.org
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
-      admin_group: "bingo-users"
 
       conversejs:
         weblocation: /conversejs-bingo
-
-#      testuser:			# Testuser müsste auf Webserver angelegt werden
-#        name: "nrpe-testuser"
 
 
 conversejs:
@@ -80,4 +75,3 @@ nrpe:
 
 
 ansible_python_interpreter: /usr/bin/python3
-allow_world_readable_tmpfiles:  true
