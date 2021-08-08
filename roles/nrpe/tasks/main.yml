@@ -7,12 +7,21 @@
     name: "nrpe.service"
     enabled: yes
 
-- name: Install check_xmpp
+- name: Create directory for locally installed check plugins
+  file:
+    path: "/usr/local/nrpe-plugins/"
+    state: directory
+    mode: "0755"
+
+- name: Install check_xmpp plugin
   copy:
     src: "check_xmpp_linux_x64_v0.1.bin"
     dest: "/usr/local/nrpe-plugins/check_xmpp"
     group: "nagios"
     mode: "0775"
+
+- name: Make sure Prosody is running
+  meta: flush_handlers
 
 - name: Create XMPP test users
   command: "/usr/bin/prosodyctl register {{ item.testuser.name }} {{ item.name }} {{ testuserpwd[item.name] }}"
@@ -26,14 +35,14 @@
     group: "nagios"
     mode: "0775"
 
-- name: Install check_prosody
+- name: Install check_prosody plugin
   copy:
     src: "check_postgres.pl"
     dest: "/usr/local/nrpe-plugins/check_postgres"
     group: "nagios"
     mode: "0775"
 
-- name: Install check_http
+- name: Install check_http plugin
   zypper:
    name: "monitoring-plugins-http"
 

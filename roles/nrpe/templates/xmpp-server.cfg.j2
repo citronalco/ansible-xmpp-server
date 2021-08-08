@@ -21,7 +21,7 @@ command[check_proc_coturn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C turnser
 command[check_proc_apache2]=/usr/lib/nagios/plugins/check_procs -c 1: -C httpd-prefork
 
 # PostgreSQL Database
-command[check_database]=/usr/local/nrpe-plugins/check_postgres -action=connection -dbname={{ postgresql.databasename | default('prosody') }} -dbuser={{ postgresql.username | default('prosody') }} -dbpass={{ pgpwd }}
+command[check_database]=/usr/local/nrpe-plugins/check_postgres -action=connection -dbname={{ postgresql.databasename | default('prosody') }} -dbuser={{ postgresql.username | default('prosody') }} -dbpass={{ pgpwd }} -host=localhost
 
 # XMPP test user
 {% for domain in prosody.xmpp_domains %}

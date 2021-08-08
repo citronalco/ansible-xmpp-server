@@ -7,6 +7,6 @@
     - certbot
     - apache2
     - coturn
-    - prosody
     - postgresql
+    - prosody
     - nrpe

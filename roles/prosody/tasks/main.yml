@@ -36,10 +36,20 @@
 
 
 # Prosody
+- name: Enable devel-lua repository for PostgreSQL support
+  zypper_repository:
+    name: "devel_languages_lua"
+    repo: 'https://download.opensuse.org/repositories/devel:/languages:/lua/{{ ansible_distribution | replace(" ", "_") }}_{{ ansible_distribution_version }}/'
+    auto_import_keys: yes
+    runrefresh: yes
+
 - name: Install Prosody
   zypper:
-    name: "prosody"
-  notify: enable prosody
+    name: "{{ item }}"
+  loop:
+    - prosody
+    - lua51-luadbi
+    - lua51-luaevent
 
 - name: Create directory for systemd service override
   file:
@@ -53,6 +63,11 @@
     dest: /etc/systemd/system/prosody.service.d/ansible-xmpp.conf
   notify:
     - reread systemd configs
+
+- name: Enable Prosody
+  systemd:
+    name: prosody
+    enabled: yes
 
 - name: Install Mercurial
   zypper:
@@ -143,6 +158,9 @@
   loop: "{{ prosody.xmpp_domains }}"
   notify: restart prosody
 
+- name: Import LetsEncrypt certificates
+  command: "/etc/letsencrypt/renewal-hooks/post/prosody.sh"
+
 - name: Install PHP file upload script
   copy:
     remote_src: true
@@ -178,8 +196,3 @@
     src: logrotate
     dest: /etc/logrotate.d/prosody
     mode: "0644"
-
-- name: Enable Prosody
-  systemd:
-    name: prosody
-    enabled: yes

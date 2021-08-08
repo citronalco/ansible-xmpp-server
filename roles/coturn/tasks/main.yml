@@ -14,3 +14,7 @@
   systemd:
     name: coturn
     enabled: yes
+    state: started
+
+- name: Import LetsEncrypt certificate
+  command: /etc/letsencrypt/renewal-hooks/post/coturn.sh
