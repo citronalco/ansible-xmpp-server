@@ -72,7 +72,7 @@ modules_enabled = {
 
 	-- HTTP modules
 		"bosh"; -- Enable BOSH clients, aka "Jabber over HTTP" [XEP-0124] [XEP-0206]
-		-- "websocket"; -- XMPP over WebSockets -- FIXME: Verbindungen über Websocket funktionieren nicht. Nach dem Verbindungsaufbau passiert nichts mehr - bis zum Timeout
+		"websocket"; -- XMPP over WebSockets
 		"http_altconnect"; -- Publish available BOSH, websocket and other HTTP endpoints for autodetection via .well-known HTTP method [XEP-0156]
 		-- "http_files"; -- Serve static files from a directory over HTTP, e.g. a registration form
 
@@ -119,7 +119,6 @@ modules_disabled = {
 	-- "offline"; -- Store offline messages
 	-- "c2s"; -- Handle client connections
 	-- "s2s"; -- Handle server-to-server connections
-	"websocket"; -- FIXME: Verbindungen über Websocket funktionieren nicht. Nach dem Verbindungsaufbau passiert nichts mehr - bis zum Timeout
 }
 
 
