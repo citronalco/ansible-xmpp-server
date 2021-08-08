@@ -4,6 +4,7 @@
 # If you don't set a password and the server was NOT already set up with this playbook, a random password will be generated and used.
 
 
+##### EXAMPLE:
 # In this example we're setting up a XMPP server for two XMPP domains:
 # - foobar.org:
 #   Open for anyone, users can register with their XMPP client
@@ -16,14 +17,15 @@
 # The example server you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
 #
 #
-# Prerequisites:
+#### PREREQUISITES:
 # - TLS certificate and private key of foobar.org and server.net
-# - Access to the DNS configuration of foobar.org, server.net and example.com.
+# - Access to the web servers of foobar.org and server.net to be able to set up a reverse proxy configuration for Prosody's well-known URLs
+# - Access to the DNS configuration of foobar.org, server.net and example.com to add some entries
 #
-# DNS setup for the configuration below:
+#### 1. DNS CONFIGURATION
+# DNS configuration must be set up BEFORE installing this playbook, so let's start with this:
 # XMPP clients and servers heavily use DNS to figure out possible connection methods.
 # So quite a few DNS entries in the name servers for foobar.org, server.net and xmpp.webexample.com are required.
-# Set the DNS extries BEFORE installing this playbook!
 # Please not the subtile differences between the DNS entries for foobar.org and server.net and how they correspond with the component's host names in the configuration below.
 #
 # Name server entries for example.com:
@@ -66,18 +68,29 @@
 #  _xmppconnect.server.net.                     300 IN TXT "_xmpp-client-xbosh=https://xmpp.example.com/http-bind"             # bosh
 #  _xmppconnect.server.net.                     300 IN TXT "_xmpp-client-websocket=wss://xmpp.example.com/xmpp-websocket"      # websocket
 #
+#### 2. RUN THE PLAYBOOK
 #
-# TLS certificates:
+#### 3. INSTALL TLS CERTIFICATES FOR foobar.org AND server.net
 # After installing this playbook you have to copy the certificate and the private key of foobar.org and server.net to this server:
-# /etc/prosody/certs/foobar.org/privkey.pem
-# /etc/prosody/certs/foobar.org/fullchain.pem
-# /etc/prosody/certs/server.net/privkey.pem
-# /etc/prosody/certs/server.net/fullchain.pem
-# Then change ownership on those files to the user "prosody" and execute "sudo prosodyctl reload"
-#
+#   /etc/prosody/certs/foobar.org/privkey.pem
+#   /etc/prosody/certs/foobar.org/fullchain.pem
+#   /etc/prosody/certs/server.net/privkey.pem
+#   /etc/prosody/certs/server.net/fullchain.pem
+# Then change ownership on those files to the user "prosody" and execute "sudo prosodyctl reload". Do the same when updating certificates/keys.
 # All other certificates are created and updated automatically. 
-
-
+#
+#### 4. SET UP well-known URLs
+# Some XMPP clients query so called well-known URLs to figure out a domain's XMPP server.
+# Prosody provides the content for those URLs, so you only have to configure the web servers of foobar.org and example.com to deliver that content when those well-known URLs are called.
+# Simple HTTP redirects do NOT work (resets the CORS header), you have to configure it as reverse proxy.
+#
+# Web server of foobar.org:
+#   https://foobar.org/.well-known/host-meta.json -> https://xmpp.example.com/.well-known/host-meta.json
+#   https://foobar.org/.well-known/host-meta -> https://xmpp.example.com/.well-known/host-meta
+# Web server of server.net:
+#   https://server.net/.well-known/host-meta.json -> https://xmpp.example.com/.well-known/host-meta.json
+#   https://server.net/.well-known/host-meta -> https://xmpp.example.com/.well-known/host-meta
+#
 
 # PostgreSQL
 postgresql:
@@ -119,7 +132,7 @@ prosody:
       upload: "upload.foobar.org"
       pubsub: "pubsub.foobar.org"
 
-      legacy_ssl_port: 5223			# port for "legacy SSL" connections
+      legacy_ssl_port: 5223			# port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
       authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
       allow_registration: true			# enable anyone to register (default: false)
