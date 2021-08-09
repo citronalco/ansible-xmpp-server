@@ -135,7 +135,8 @@ prosody:
       legacy_ssl_port: 5223			# port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
       authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
-      allow_registration: true			# enable anyone to register (default: false)
+      allow_registration: true			# allow anyone to register within a XMPP client (default: false, does not work if "authentication_provider = imap")
+      max_upload_mbyte: 1000			# max. file upload size in MByte (default: 100)
 
       admin_jids:				# list of JIDs that should have admin access
         - admin@foobar.org

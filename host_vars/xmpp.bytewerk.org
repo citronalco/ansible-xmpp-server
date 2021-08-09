@@ -28,6 +28,8 @@ prosody:
 
       allow_registration: false		# User nur manuell anlegen
 
+      max_upload_mbyte: 100		# Max. Dateiuploadgröße
+
       admin_jids:
         - sqozz@bytewerk.org
         - cfr34k@bytewerk.org
@@ -52,6 +54,8 @@ prosody:
 
       authentication_provider: imap
       allow_registration: false		# Da "authentication_provider: imap" kann sich sowieo kein neuer User per XMPP registrieren, müssen auf Mailserver angelegt werden
+
+      max_upload_mbyte: 100
 
       admin_jids:
         - sqozz@bytewerk.org
