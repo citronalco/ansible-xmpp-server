@@ -27,6 +27,8 @@ authentication = "{{ item.authentication_provider | default("internal_hashed") }
 allow_registration = {{ item.allow_registration | default("false") }}
 
 
+pep_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
+
 -- mod_conversejs:
 conversejs_options = {
 	view_mode = "fullscreen";
@@ -36,12 +38,12 @@ conversejs_options = {
 	csi_waiting_time = "10"; -- after XX seconds set user status to "inactive" (default: 0 -> never)
 	auto_away = "180"; -- after XX seconds set user status to "away" (default: 0 -> never)
 	auto_xa = "600"; -- after XX seconds set user status to "extended away" (default: 0 -> never)
-	auto_reconnect = true; -- on network failures try to reconnect automatically
+	auto_reconnect = true; -- on network failures try to reconnect automatically (default: false)
 	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
 	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
 	auto_register_muc_nickname = true; -- automatically register user's nickname in MUC (default: false)
 	muc_domain = "{{ item.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
-	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server
+	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server (default: false)
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
@@ -65,7 +67,7 @@ Component "{{ item.muc }}" "muc"
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
 Component "{{ item.proxy65 }}" "proxy65"
-	-- proxy65_acl = { "{{ item.name }}" }; -- do NOT enable, would restrict proxy65 usage only for users from listed XMPP domains
+	-- proxy65_acl = { "{{ item.name }}" }; -- do NOT enable, would limit proxy65 usage to internal usage
 
 
 -- PubSub ("Publish-Subscribe") [XEP-0060]
