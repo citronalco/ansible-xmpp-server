@@ -13,7 +13,7 @@ Included are:
 * Converse.js with OMEMO support
 * LetsEncrypt certificates
 
-Supports internal user authentication and authentication against an IMAP server.\
+Supports multiple domains, internal user authentication and authentication against an IMAP server.\
 For documentation see the example configuration in `host_vars/xmpp.example.com`
 
 #### Usage:
