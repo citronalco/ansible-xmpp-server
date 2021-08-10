@@ -27,7 +27,7 @@ authentication = "{{ item.authentication_provider | default("internal_hashed") }
 allow_registration = {{ item.allow_registration | default("false") }}
 
 -- Archiving configuration
-archive_expires_after = "{{ item.delete_messages_after_days | default("7") }}d"; -- Remove archived messages after XXX days (default: 7d)
+archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived messages after XXX days (default: 7d)
 
 pep_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
 
@@ -65,17 +65,14 @@ Component "{{ item.components.muc }}" "muc"
 	}
 	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
 
-
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
 Component "{{ item.components.proxy65 }}" "proxy65"
 	-- proxy65_acl = { "{{ item.name }}" }; -- do NOT enable, would limit proxy65 usage to internal usage
 
-
 -- PubSub ("Publish-Subscribe") [XEP-0060]
 Component "{{ item.components.pubsub }}" "pubsub"
 	pubsub_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
-
 
 -- Handle file uploads with external webserver and share_v2.php (file is provided by mod_http_upload_external) [XEP-0363]
 Component "{{ item.components.upload }}" "http_upload_external"

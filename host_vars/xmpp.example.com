@@ -135,8 +135,8 @@ prosody:
       authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
       allow_registration: true			# allow anyone to register within a XMPP client (default: false, does not work if "authentication_provider = imap")
       max_upload_mbyte: 1000			# max. file upload size in MByte (default: 100)
-      delete_uploads_after_days: 31		# delete uploaded files after XX days. optional, default: 7
-      delete_messages_after_days: 31		# delete archived messages after XX days. optional, default: 7
+      delete_uploads_after_days: 31		# delete uploaded files after XX days. (default: never)
+      delete_messages_after_days: 31		# delete archived messages after XX days. (default: never)
 
 
       admin_jids:				# list of JIDs that should have admin access
@@ -148,8 +148,8 @@ prosody:
         auto_list_rooms: true			# automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
         weblocation: /conversejs-foobar		# offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
 
-      testuser:					# create a test user for NRPE (optional, default: no testuser)
-        name: "nrpe-testuser"			# testuser's jid will be "nrpe-testuser@foobar.org"
+      testuser:					# create a test user for NRPE (optional, default: do not create a test user)
+        name: "nrpe-testuser"			# test user's jid will be "nrpe-testuser@foobar.org"
         password: "hkjwhd8u230wjl"		# optional, default: random
 
     - name: "server.net"

@@ -187,10 +187,18 @@
 - name: Set up cronjobs to delete uploaded files
   cron:
     name: "Clean up Prosody upload directory of {{ item.name }}"
-    job: "/usr/bin/find /srv/var/prosody-upload/{{ item.name }}/  -type f -mtime +{{ item.delete_uploads_after_days | default(7) }} -exec rm {}\\ ;"
+    job: "/usr/bin/find /srv/var/prosody-upload/{{ item.name }}/ -type f -mtime +{{ item.delete_uploads_after_days }} -exec rm {}\\ ;"
     minute: "15"
     hour: "1"
   loop: "{{ prosody.xmpp_domains }}"
+  when: item.delete_uploads_after_days is defined
+
+- name: Remove cronjobs to delete uploaded files
+  cron:
+    name: "Clean up Prosody upload directory of {{ item.name }}"
+    state: absent
+  loop: "{{ prosody.xmpp_domains }}"
+  when: item.delete_uploads_after_days is not defined
 
 - name: Configure Logrotate
   copy:

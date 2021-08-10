@@ -27,8 +27,8 @@ prosody:
 
       max_upload_mbyte: 100		# Max. Dateiuploadgröße (optional, Standard: 100)
 
-      delete_uploads_after_days: 31	# Uploads nach XX Tagen löschen (optional, Standard: 7 Tage)
-      delete_messages_after_days: 31	# Nachrichten nach XX Tagen löschen (optional, Standard: 7 Tage)
+      delete_uploads_after_days: 31	# Uploads nach XX Tagen löschen (optional, Standard: nie)
+      delete_messages_after_days: 31	# Nachrichten nach XX Tagen löschen (optional, Standard: nie)
 
       admin_jids:
         - sqozz@bytewerk.org
