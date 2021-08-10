@@ -7,6 +7,9 @@ allowed_hosts=127.0.0.1,{{ nrpe.allowed_hosts | default([]) | join(',') }}
 
 # Disk Space
 command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 15% -c 10% -p /
+{% for domain in prosody.xmpp_domains %}
+command[check_disk_upload_{{ domain.name }}]=/usr/lib/nagios/plugins/check_disk -w 15% -c 10% -p /srv/var/prosody-upload/{{ domain.name }}/
+{% endfor %}
 
 # systemd Services
 command[check_service_prosody]=/usr/local/nrpe-plugins/check_systemd_service prosody
