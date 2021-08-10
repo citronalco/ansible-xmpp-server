@@ -26,6 +26,8 @@ authentication = "{{ item.authentication_provider | default("internal_hashed") }
 -- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap): [XEP-0077]
 allow_registration = {{ item.allow_registration | default("false") }}
 
+-- Archiving configuration
+archive_expires_after = "{{ item.delete_messages_after_days | default("7") }}d"; -- Remove archived messages after XXX days (default: 7d)
 
 pep_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
 
@@ -42,7 +44,7 @@ conversejs_options = {
 	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
 	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
 	auto_register_muc_nickname = true; -- automatically register user's nickname in MUC (default: false)
-	muc_domain = "{{ item.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
+	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
 	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server (default: false)
 }
 conversejs_tags = {
@@ -53,7 +55,7 @@ conversejs_tags = {
 
 ------ Components ------
 --- Set up a MUC (multi-user chat) room server: [XEP-0045]
-Component "{{ item.muc }}" "muc"
+Component "{{ item.components.muc }}" "muc"
 	restrict_room_creation = false; -- everyone can create rooms
 	modules_enabled = {
 	    "muc_limits"; -- limit max. event rate in a MUC room
@@ -66,18 +68,18 @@ Component "{{ item.muc }}" "muc"
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
-Component "{{ item.proxy65 }}" "proxy65"
+Component "{{ item.components.proxy65 }}" "proxy65"
 	-- proxy65_acl = { "{{ item.name }}" }; -- do NOT enable, would limit proxy65 usage to internal usage
 
 
 -- PubSub ("Publish-Subscribe") [XEP-0060]
-Component "{{ item.pubsub }}" "pubsub"
+Component "{{ item.components.pubsub }}" "pubsub"
 	pubsub_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
 
 
 -- Handle file uploads with external webserver and share_v2.php (file is provided by mod_http_upload_external) [XEP-0363]
-Component "{{ item.upload }}" "http_upload_external"
-	http_upload_external_base_url = "https://{{ item.upload }}/share_v2.php/"; -- URL to share_v2.php script
+Component "{{ item.components.upload }}" "http_upload_external"
+	http_upload_external_base_url = "https://{{ item.components.upload }}/share_v2.php/"; -- URL to share_v2.php script
 	http_upload_external_secret = "{{ uploadpwd[item.name] }}"; -- shared secret, must also be entered in share_v2.php
 	http_upload_external_file_size_limit = {{ item.max_upload_mbyte | default(100) }}*1024*1024; -- max. upload size in bytes (default: 100 MByte)
 	http_upload_external_protocol = "v2"; -- see docs of mod_http_upload_external

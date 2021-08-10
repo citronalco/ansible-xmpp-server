@@ -37,8 +37,8 @@ command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http 
 
 # Certificates for Prosody components
 {% for domain in prosody.xmpp_domains %}
-{% for component in [ 'muc', 'proxy65', 'pubsub', 'upload' ] %}
-command[check_certificate_{{ domain[component] }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ domain[component] }}
+{% for component in domain.components %}
+command[check_certificate_{{ domain.components[component] }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ domain.components[component] }}
 {% endfor %}
 {% endfor %}
 

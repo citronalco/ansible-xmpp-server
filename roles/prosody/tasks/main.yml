@@ -165,31 +165,32 @@
   copy:
     remote_src: true
     src: "/usr/local/lib/prosody-modules/mod_http_upload_external/share_v2.php"
-    dest: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    dest: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     mode: "0640"
     owner: "wwwrun"
   loop: "{{ prosody.xmpp_domains }}"
 
 - name: Configure PHP file upload script - upload directory
   lineinfile:
-    path: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_STORE_DIR\s*='
     line: "$CONFIG_STORE_DIR = '/srv/var/prosody-upload/{{ item.name }}';"
   loop: "{{ prosody.xmpp_domains }}"
 
 - name: Configure PHP file upload script - shared secret
   lineinfile:
-    path: "/srv/var/www/vhosts/{{ item.upload }}/share_v2.php"
+    path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_SECRET\s*='
     line: "$CONFIG_SECRET = '{{ uploadpwd[item.name] }}';"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Set up cronjob to delete uploaded files
+- name: Set up cronjobs to delete uploaded files
   cron:
-    name: "Clean up Prosody upload directory"
-    job: "/usr/bin/find /srv/var/prosody-upload/ -type f -mtime +{{ prosody.delete_uploads_after_days | default(365) }} -exec rm {}\\ ;"
+    name: "Clean up Prosody upload directory of {{ item.name }}"
+    job: "/usr/bin/find /srv/var/prosody-upload/{{ item.name }}/  -type f -mtime +{{ item.delete_uploads_after_days | default(7) }} -exec rm {}\\ ;"
     minute: "15"
     hour: "1"
+  loop: "{{ prosody.xmpp_domains }}"
 
 - name: Configure Logrotate
   copy:

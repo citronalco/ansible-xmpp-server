@@ -3,11 +3,7 @@
     src: "vhost-{{ item }}.j2"
     dest: "/etc/apache2/vhosts.d/{{ domain[item] }}.conf"
     mode: "0644"
-  with_items:
-    - "muc"
-    - "proxy65"
-    - "pubsub"
-    - "upload"
+  loop: "{{ domain | list }}"
   notify: restart apache2
 
 - name: Create vHost directories
@@ -15,8 +11,4 @@
     path: "/srv/var/www/vhosts/{{ domain[item] }}"
     state: directory
     mode: "0755"
-  with_items:
-    - "muc"
-    - "proxy65"
-    - "pubsub"
-    - "upload"
+  loop: "{{ domain | list }}"

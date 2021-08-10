@@ -92,6 +92,7 @@
 #   https://server.net/.well-known/host-meta -> https://xmpp.example.com/.well-known/host-meta
 #
 
+
 # PostgreSQL
 postgresql:
   databasename: prosody				# optional, default: prosody
@@ -106,9 +107,6 @@ turnserver:
 
 # Prosody
 prosody:
-  delete_uploads_after_days: 31			# delete uploaded files after XX days. optional, default: 365
-  delete_messages_after_days: 31		# delete archived messages after XX days. optional, default: 365
-
   # only required if any of the xmpp_domains below should authenticate against an IMAP server ("authentication_provider = imap")
   imap_auth:
     host: mail.server.net
@@ -126,17 +124,20 @@ prosody:
   xmpp_domains:
     - name: "foobar.org"
 
-      # Components - all four are required
-      conference: "conference.foobar.org"
-      proxy: "proxy.foobar.org"
-      upload: "upload.foobar.org"
-      pubsub: "pubsub.foobar.org"
+      components:				# you need all four (muc, proxy65, upload, pubsub), and you need to set them up in DNS
+        conference: "conference.foobar.org"
+        proxy65: "proxy.foobar.org"
+        upload: "upload.foobar.org"
+        pubsub: "pubsub.foobar.org"
 
       legacy_ssl_port: 5223			# port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
       authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
       allow_registration: true			# allow anyone to register within a XMPP client (default: false, does not work if "authentication_provider = imap")
       max_upload_mbyte: 1000			# max. file upload size in MByte (default: 100)
+      delete_uploads_after_days: 31		# delete uploaded files after XX days. optional, default: 7
+      delete_messages_after_days: 31		# delete archived messages after XX days. optional, default: 7
+
 
       admin_jids:				# list of JIDs that should have admin access
         - admin@foobar.org

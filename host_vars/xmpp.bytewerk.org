@@ -1,8 +1,4 @@
 prosody:
-  # Optional: Aufbewahrungsdauer für Nachrichten und Uploads einschränken, Standard: 365 Tage
-  delete_uploads_after_days: 31
-  delete_messages_after_days: 31
-
   # IMAP-Server für die Authentifizierung der @bingo-ev.de-User
   imap_auth:
     host: mail.bingo-ev.de
@@ -19,16 +15,20 @@ prosody:
     - name: "bytewerk.org"
 
       # Components
-      muc: "conference.bytewerk.org"
-      proxy65: "proxy.bytewerk.org"
-      pubsub: "pubsub.bytewerk.org"
-      upload: "upload.bytewerk.org"
+      components:
+        muc: "conference.bytewerk.org"
+        proxy65: "proxy.bytewerk.org"
+        pubsub: "pubsub.bytewerk.org"
+        upload: "upload.bytewerk.org"
 
       legacy_ssl_port: 5223
 
       allow_registration: false		# User nur manuell anlegen
 
-      max_upload_mbyte: 100		# Max. Dateiuploadgröße
+      max_upload_mbyte: 100		# Max. Dateiuploadgröße (optional, Standard: 100)
+
+      delete_uploads_after_days: 31	# Uploads nach XX Tagen löschen (optional, Standard: 7 Tage)
+      delete_messages_after_days: 31	# Nachrichten nach XX Tagen löschen (optional, Standard: 7 Tage)
 
       admin_jids:
         - sqozz@bytewerk.org
@@ -45,10 +45,11 @@ prosody:
     - name: "bingo-ev.de"
 
       # Components
-      muc: "conference.bingo-ev.de"
-      proxy65: "proxy65.bingo-ev.de"
-      pubsub: "pubsub.bingo-ev.de"
-      upload: "upload.bingo-ev.de"
+      components:
+        muc: "conference.bingo-ev.de"
+        proxy65: "proxy65.bingo-ev.de"
+        pubsub: "pubsub.bingo-ev.de"
+        upload: "upload.bingo-ev.de"
 
       legacy_ssl_port: 5225
 
@@ -56,6 +57,9 @@ prosody:
       allow_registration: false		# Da "authentication_provider: imap" kann sich sowieo kein neuer User per XMPP registrieren, müssen auf Mailserver angelegt werden
 
       max_upload_mbyte: 100
+
+      delete_uploads_after_days: 31
+      delete_messages_after_days: 31
 
       admin_jids:
         - sqozz@bytewerk.org

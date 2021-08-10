@@ -277,7 +277,7 @@ sql = {
 -- is used to synchronize conversations between multiple clients, even if
 -- they are offline. This setting controls how long Prosody will keep
 -- messages in the archive before removing them.
-archive_expires_after = "{{ prosody.delete_messages_after_days | default("365") }}d"; -- Remove archived messages after XXX days (default: 7d)
+-- archive_expires_after = "1w";
 
 -- You can also configure messages to be stored in-memory only. For more
 -- archiving options, see https://prosody.im/doc/modules/mod_mam
