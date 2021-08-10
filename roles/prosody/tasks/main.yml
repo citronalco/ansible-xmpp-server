@@ -149,7 +149,7 @@
     mode: "0640"
   notify: restart prosody
 
-- name: Create Prosody sharedGroups files
+- name: Create Prosody sharedGroups file
   template:
     src: "sharedGroups.txt.j2"
     dest: "/etc/prosody/sharedGroups-{{ item.name }}.txt"
@@ -161,6 +161,14 @@
 - name: Import LetsEncrypt certificates
   command: "/etc/letsencrypt/renewal-hooks/post/prosody.sh"
 
+- name: Create directory for Prosody file uploads
+  file:
+    path: "/srv/var/prosody-upload/{{ item.name }}"
+    state: directory
+    owner: wwwrun
+    mode: "0770"
+  loop: "{{ prosody.xmpp_domains }}"
+
 - name: Install PHP file upload script
   copy:
     remote_src: true
@@ -170,30 +178,32 @@
     owner: "wwwrun"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Configure PHP file upload script - upload directory
+- name: Configure PHP file upload script - set upload directory
   lineinfile:
     path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_STORE_DIR\s*='
     line: "$CONFIG_STORE_DIR = '/srv/var/prosody-upload/{{ item.name }}';"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Configure PHP file upload script - shared secret
+- name: Configure PHP file upload script - set shared secret
   lineinfile:
     path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_SECRET\s*='
     line: "$CONFIG_SECRET = '{{ uploadpwd[item.name] }}';"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Set up cronjobs to delete uploaded files
+- name: Set up cronjob to delete uploaded files
   cron:
     name: "Clean up Prosody upload directory of {{ item.name }}"
-    job: "/usr/bin/find /srv/var/prosody-upload/{{ item.name }}/ -type f -mtime +{{ item.delete_uploads_after_days }} -exec rm {}\\ ;"
-    minute: "15"
+    job: "/usr/bin/find /srv/var/prosody-upload/{{ item.name }}/ -type f -mtime +{{ item.delete_uploads_after_days }} -exec rm {} \\;"
+    minute: "{{ index % 60 }}"
     hour: "1"
-  loop: "{{ prosody.xmpp_domains }}"
+  loop: "{{ prosody.xmpp_domains | flatten(levels=1) }}"
+  loop_control:
+    index_var: index
   when: item.delete_uploads_after_days is defined
 
-- name: Remove cronjobs to delete uploaded files
+- name: Remove cronjob to delete uploaded files
   cron:
     name: "Clean up Prosody upload directory of {{ item.name }}"
     state: absent

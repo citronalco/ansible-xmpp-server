@@ -1,3 +1,0 @@
-- conversejs ist seltsam installiert: dist, sounds,...??? kann mir nicht vorstellen dass mein workaround echt nötig ist - oder ist das nur wegen der prosody-conversjs-config?
-- coturn auf 443, extra hostnamen beantragen -> Suse-Version zu alt -> nein, sollte gehen
-- prosody-modules: version wählbar machen

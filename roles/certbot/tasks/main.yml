@@ -17,7 +17,7 @@
 
 - name: Create certificates for XMPP components
   include_tasks: vhosts.yml
-  loop: "{{ prosody.xmpp_domains }}"
+  loop: "{{ prosody.xmpp_domains | map(attribute='components') }}"
   loop_control:
     loop_var: domain
 

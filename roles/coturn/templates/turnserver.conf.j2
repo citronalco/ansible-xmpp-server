@@ -47,8 +47,14 @@ simple-log
 
 # HOW TO TEST:
 # For testing on https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/:
-# STUN: "stun:{{ prosody.web_domain.name }}:3478", username empty, password empty. Result's last line must contain "srflx".
-# TURN: comment "use-auth-secret" and "static-auth-secret" above, enable a test user by uncommenting the line "user=test:test" below and restart coturn. Then use "turn:{{ prosody.web_domain.name }}:3478", username=test, password=test. Result's last line must contain "relay".
+# STUN:
+# Use URL "stun:{{ prosody.web_domain.name }}:3478", username empty, password empty.
+# Result's last line must contain "srflx".
+# TURN:
+# Comment "use-auth-secret" and "static-auth-secret" above, enable a test user by uncommenting the line "user=test:test" below and restart coturn.
+# Then use "turn:{{ prosody.web_domain.name }}:3478", username=test, password=test.
+# Result's last line must contain "relay".
+# Do not forget to undo the changes and restart coturn afterwards!
 #user=test:test
 
 # Block connections to IP ranges which shouldn't be reachable
