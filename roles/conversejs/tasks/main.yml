@@ -1,0 +1,33 @@
+# install Converse.js
+- name: Create target directory for Converse.js
+  file:
+    path: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+    state: directory
+    mode: "0755"
+
+- name: Retrieve list of Converse.js releases
+  uri:
+    url: "https://api.github.com/repos/conversejs/converse.js/releases/tags/{{ conversejs.conversejs_release_tag }}"
+    return_content: true
+  register: conversejs_releases_json
+  check_mode: false
+
+- name: Download and uncompress Converse.js
+  unarchive:
+    remote_src: true
+    src: "{{ conversejs_releases_json.json.assets | json_query('[*].browser_download_url') | last }}"
+    dest: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+
+- name: Create generic symlink for Converse.js
+  file:
+    src: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
+    dest: "/usr/local/conversejs/conversejs"
+    state: link
+
+- name: Download libsignal-protocol-javascript for OMEMO support
+  git:
+    repo: https://github.com/conversejs/libsignal-protocol-javascript.git
+    version: "{{ conversejs.libsignal_release_tag }}"
+    dest: "/usr/local/conversejs/libsignal-protocol-javascript"
+    clone: yes
+    update: yes

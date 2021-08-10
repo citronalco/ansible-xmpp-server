@@ -8,5 +8,6 @@
     - apache2
     - coturn
     - postgresql
+    - conversejs
     - prosody
     - nrpe
