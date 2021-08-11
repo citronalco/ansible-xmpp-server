@@ -23,8 +23,8 @@ contact_info = {
 -- Authentication method (default: internal_hashed)
 authentication = "{{ item.authentication_provider | default("internal_hashed") }}"
 
--- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap): [XEP-0077]
-allow_registration = {{ item.allow_registration | default("false") }}
+-- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap) [XEP-0077] (default: false)
+allow_registration = {{ item.allow_registration | default(false) | ternary("true", "false") }}
 
 -- Archiving configuration
 archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived messages after XXX days (default: 7d)
