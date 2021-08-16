@@ -29,8 +29,6 @@ allow_registration = {{ item.allow_registration | default(false) | ternary("true
 -- Archiving configuration
 archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived messages after XXX days (default: 7d)
 
-pep_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
-
 -- mod_conversejs:
 conversejs_options = {
 	view_mode = "fullscreen";
@@ -64,6 +62,7 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_cloud_notify"; -- enable push notifications for iOS devices
 	}
 	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
+	muc_room_default_history_length = 200 ; -- keep the last 200 messages (default: 20)
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
@@ -76,7 +75,7 @@ Component "{{ item.components.pubsub }}" "pubsub"
 
 -- Handle file uploads with external webserver and share_v2.php (file is provided by mod_http_upload_external) [XEP-0363]
 Component "{{ item.components.upload }}" "http_upload_external"
-	http_upload_external_base_url = "https://{{ item.components.upload }}/share_v2.php/"; -- URL to share_v2.php script
+	http_upload_external_base_url = "https://{{ item.components.upload }}/s/"; -- URL to share_v2.php script
 	http_upload_external_secret = "{{ uploadpwd[item.name] }}"; -- shared secret, must also be entered in share_v2.php
 	http_upload_external_file_size_limit = {{ item.max_upload_mbyte | default(100) }}*1024*1024; -- max. upload size in bytes (default: 100 MByte)
 	http_upload_external_protocol = "v2"; -- see docs of mod_http_upload_external

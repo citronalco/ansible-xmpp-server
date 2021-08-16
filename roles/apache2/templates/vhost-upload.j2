@@ -54,6 +54,10 @@
     # Enable PHP
     Include /etc/apache2/conf.d/mod_php7.conf
 
+    # Enable using /s/ in addition to /share_v2.php/
+    RewriteEngine On
+    RewriteRule /s/(.*)$ /share_v2.php/$1
+
     # Configure directory for Prosody's file upload
     <Directory /srv/var/www/vhosts/{{ domain[item] }}>
         Require all granted
