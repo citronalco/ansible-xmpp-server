@@ -42,6 +42,7 @@
   hg:
     repo: "https://hg.prosody.im/prosody-modules/"
     dest: "/usr/local/lib/prosody-modules"
+    force: yes
   notify: restart prosody
   tags:
     - skip_ansible_lint
