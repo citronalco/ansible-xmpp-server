@@ -1,7 +1,7 @@
 # Note on passwords in this file:
 # All passwords here are optional, but if you set a password it will be used.
-# If you don't set a password and the server was already set up with this playbook, then the password currently in use will no be changed.
 # If you don't set a password and the server was NOT already set up with this playbook, a random password will be generated and used.
+# If you don't set a password and the server was already set up with this playbook, then the password currently in use will no be changed and continued to be used.
 
 
 ##### EXAMPLE:
@@ -14,8 +14,8 @@
 #   JIDs: <IMAP-username>@server.net, password: <IMAP-password>
 #
 # "xmpp.example.com" will be used for BOSH, websockets, STUN/TURN server, Converse.js and a info web page, for all XMPP domains.
-# The example server you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
 #
+# The example server you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
 #
 #### PREREQUISITES:
 # - TLS certificate and private key of foobar.org and server.net
@@ -25,7 +25,7 @@
 #### 1. DNS CONFIGURATION
 # DNS configuration must be set up BEFORE installing this playbook, so let's start with this:
 # XMPP clients and servers heavily use DNS to figure out possible connection methods.
-# So quite a few DNS entries in the name servers for foobar.org, server.net and xmpp.webexample.com are required.
+# So quite a few DNS entries in the name servers for foobar.org, server.net and xmpp.example.com are required.
 # Please not the subtile differences between the DNS entries for foobar.org and server.net and how they correspond with the component's host names in the configuration below.
 #
 # Name server entries for example.com:
@@ -69,6 +69,7 @@
 #  _xmppconnect.server.net.                     300 IN TXT "_xmpp-client-websocket=wss://xmpp.example.com/xmpp-websocket"      # websocket
 #
 #### 2. RUN THE PLAYBOOK
+# ansible-playbook -i hosts.example xmpp.yml
 #
 #### 3. INSTALL TLS CERTIFICATES FOR foobar.org AND server.net
 # After installing this playbook you have to copy the certificate and the private key of foobar.org and server.net to this server:
