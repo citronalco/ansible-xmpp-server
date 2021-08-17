@@ -140,7 +140,7 @@ prosody:
       delete_messages_after_days: 31		# delete archived messages after XX days. (default: never)
 
 
-      admin_jids:				# list of JIDs that should have admin access
+      admin_jids:				# list of JIDs that should have admin access. (default: none)
         - admin@foobar.org
         - someone@otherexample.com
       admin_group: "foobar admins"		# create a contact group called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
