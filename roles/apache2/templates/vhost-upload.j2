@@ -47,7 +47,7 @@
     # LetsEncrypt
     SSLCertificateFile /etc/letsencrypt/live/{{ domain[item] }}/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/{{ domain[item] }}/privkey.pem
-    Include /etc/letsencrypt/options-ssl-apache.conf
+    Include /etc/apache2/letsencrypt-ssl-apache.conf
 
     ####################################
 

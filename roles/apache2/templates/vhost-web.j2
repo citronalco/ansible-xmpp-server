@@ -57,7 +57,7 @@
     # LetsEncrypt
     SSLCertificateFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/privkey.pem
-    Include /etc/letsencrypt/options-ssl-apache.conf
+    Include /etc/apache2/letsencrypt-ssl-apache.conf
 
     ###############################
 
@@ -70,7 +70,7 @@
 
 
     #### Prosody ####
-    # Reverse Proxy für BOSH und Websocket
+    # Reverse proxy for BOSH and websocket
     ProxyTimeout 900
 
     # BOSH

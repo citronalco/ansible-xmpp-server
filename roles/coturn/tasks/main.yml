@@ -18,3 +18,4 @@
 
 - name: Import LetsEncrypt certificate
   command: /etc/letsencrypt/renewal-hooks/post/coturn.sh
+  changed_when: false

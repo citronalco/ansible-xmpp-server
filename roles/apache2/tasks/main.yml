@@ -26,6 +26,13 @@
 
 
 # Set up Apache2 configuration
+- name: Create TLS configuration
+  template:
+    src: "letsencrypt-ssl-apache.j2"
+    dest: "/etc/apache2/letsencrypt-ssl-apache.conf"
+    mode: "0644"
+  notify: restart apache2
+
 - name: Explicitly set HTTP servername
   template:
     src: "servername.j2"

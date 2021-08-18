@@ -1,5 +1,10 @@
 # {{ ansible_managed }}
 
+# !!! If running Coturn on a server with a dynamic IP address:
+# Uncomment the line below and make sure to always have listed the server's current IPv4 and restart Coturn after changes.
+# For DSL lines this could be done with a script in /etc/ppp/ip-up.d/
+#external-ip=87.151.201.244
+
 # Hostname
 server-name={{ prosody.web_domain.name }}
 

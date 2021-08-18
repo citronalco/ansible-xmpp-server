@@ -3,7 +3,7 @@
 This playbook installs a complete XMPP server for one to many domains.\
 As of August 2021 you will get 100% compliance in Conversations.im compliance test and an "A" score on xmpp.net.
 
-Tested on openSUSE Leap 15.2 and 15.3
+Tested on openSUSE Leap 15.2 and 15.3.
 
 Included are:
 * Prosody
@@ -14,7 +14,15 @@ Included are:
 * LetsEncrypt certificates
 
 Supports multiple domains, internal user authentication and authentication against an IMAP server.\
-For documentation see the example configuration in `host_vars/xmpp.example.com`
+For **documentation** see the example configuration in `host_vars/xmpp.example.com`
+
+The configuration for `host_vars/xmpp.bytewerk.org` is used for a productive server.
+
+
+### Requirements:
+* Server running openSUSE Leap 15.2 or 15.3 with a fixed IPv4 address
+* A domain name, and you are able to edit its nameserver entries
+
 
 #### Usage:
 1. Install Ansible on your machine (e.g. on Suse: `zypper install ansible`, on Debian/Ubuntu/Mint: `apt-get install ansible`)

@@ -2,18 +2,6 @@
   zypper:
     name: "python3-certbot-apache"
 
-- name: Create directory for default TLS configuration for Apache2
-  file:
-    path: /etc/letsencrypt
-    state: directory
-    mode: "0755"
-
-- name: Create default TLS configuration for Apache2
-  copy:
-    src: options-ssl-apache.conf
-    dest: /etc/letsencrypt/options-ssl-apache.conf
-    mode: "0644"
-
 - name: Create certificates for XMPP components
   include_tasks: vhosts.yml
   loop: "{{ prosody.xmpp_domains | map(attribute='components') }}"
