@@ -2,7 +2,6 @@
   zypper:
     name: "python3-certbot-apache"
 
-# FIXME: Sollte von Certbot gemacht werden!
 - name: Create directory for default TLS configuration for Apache2
   file:
     path: /etc/letsencrypt

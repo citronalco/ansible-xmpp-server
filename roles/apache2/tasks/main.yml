@@ -1,4 +1,5 @@
-- name: Install Apache2 and PHP
+# Install Apache2
+- name: Install Apache2
   zypper:
     name: "apache2"
 
@@ -18,6 +19,13 @@
     - "php7"
   notify: restart apache2
 
+- name: Enable Apache2
+  systemd:
+    name: apache2
+    enabled: yes
+
+
+# Set up Apache2 configuration
 - name: Explicitly set HTTP servername
   template:
     src: "servername.j2"
@@ -38,6 +46,8 @@
   loop_control:
     loop_var: domain
 
+
+# Install AnonIP
 - name: Install dependencies for AnonIP
   zypper:
     name: ['git' ]
@@ -57,11 +67,8 @@
     dest: /usr/local/Anonip.git/anonip.py
     mode: "0755"
 
-- name: Enable Apache2
-  systemd:
-    name: apache2
-    enabled: yes
 
+# Install main website's content
 - name: Clone website content
   git:
     repo: "{{ prosody.web_domain.content_git.url }}"
@@ -72,4 +79,3 @@
   tags:
     - skip_ansible_lint
   when: prosody.web_domain.content_git.url is defined and prosody.web_domain.content_git.branch is defined
-

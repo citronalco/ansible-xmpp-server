@@ -1,4 +1,4 @@
-# install Converse.js
+# Install Converse.js
 - name: Create target directory for Converse.js
   file:
     path: "/usr/local/conversejs/conversejs-{{ conversejs.conversejs_release_tag }}"
@@ -24,6 +24,7 @@
     dest: "/usr/local/conversejs/conversejs"
     state: link
 
+# Install OMEMO support library for Converse.js
 - name: Download libsignal-protocol-javascript for OMEMO support
   git:
     repo: https://github.com/conversejs/libsignal-protocol-javascript.git

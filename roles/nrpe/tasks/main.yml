@@ -23,7 +23,7 @@
 - name: Make sure Prosody is running
   meta: flush_handlers
 
-- name: Create XMPP test users
+- name: Create XMPP test users in Prosody
   command: "/usr/bin/prosodyctl register {{ item.testuser.name }} {{ item.name }} {{ testuserpwd[item.name] }}"
   loop: "{{ prosody.xmpp_domains }}"
   when: item.testuser is defined

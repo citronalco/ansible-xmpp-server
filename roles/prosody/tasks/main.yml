@@ -1,4 +1,5 @@
-- name: Enable devel-lua repository for PostgreSQL support
+# Install Prosody
+- name: Set up repository devel-lua for PostgreSQL support
   zypper_repository:
     name: "devel_languages_lua"
     repo: 'https://download.opensuse.org/repositories/devel:/languages:/lua/{{ ansible_distribution | replace(" ", "_") }}_{{ ansible_distribution_version }}/'
@@ -15,7 +16,7 @@
 
 - name: Create directory for systemd service override
   file:
-    path: /etc/systemd/system/prosody.service.d
+    path: "/etc/systemd/system/prosody.service.d"
     state: directory
     mode: 0755
 
@@ -31,6 +32,14 @@
     name: prosody
     enabled: yes
 
+- name: Configure Logrotate
+  copy:
+    src: logrotate
+    dest: /etc/logrotate.d/prosody
+    mode: "0644"
+
+
+# Prosody Community Modules
 - name: Install Mercurial
   zypper:
     name: "{{ item }}"
@@ -53,6 +62,8 @@
     dest: "/usr/local/sbin/update-prosody-modules.sh"
     mode: "0755"
 
+
+# Create Prosody Configuration
 - name: Create directories for XMPP domains
   file:
     path: "{{ item }}"
@@ -124,6 +135,8 @@
 - name: Import LetsEncrypt certificates
   command: "/etc/letsencrypt/renewal-hooks/post/prosody.sh"
 
+
+# Set up Prosody community module mod_http_upload_external to allow file uploads > 10 MByte
 - name: Create directory for Prosody file uploads
   file:
     path: "/srv/var/prosody-upload/{{ item.name }}"
@@ -141,14 +154,14 @@
     owner: "wwwrun"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Configure PHP file upload script - set upload directory
+- name: PHP file upload script - set upload directory
   lineinfile:
     path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_STORE_DIR\s*='
     line: "$CONFIG_STORE_DIR = '/srv/var/prosody-upload/{{ item.name }}';"
   loop: "{{ prosody.xmpp_domains }}"
 
-- name: Configure PHP file upload script - set shared secret
+- name: PHP file upload script - set shared secret
   lineinfile:
     path: "/srv/var/www/vhosts/{{ item.components.upload }}/share_v2.php"
     regexp: '^\$CONFIG_SECRET\s*='
@@ -166,15 +179,9 @@
     index_var: index
   when: item.delete_uploads_after_days is defined
 
-- name: Remove cronjob to delete uploaded files
+- name: Remove cronjob deleting uploaded files
   cron:
     name: "Clean up Prosody upload directory of {{ item.name }}"
     state: absent
   loop: "{{ prosody.xmpp_domains }}"
   when: item.delete_uploads_after_days is not defined
-
-- name: Configure Logrotate
-  copy:
-    src: logrotate
-    dest: /etc/logrotate.d/prosody
-    mode: "0644"
