@@ -33,14 +33,10 @@
 #  xmpp.example.com.                              300 IN AAAA 2a02:1234:5678::72:1
 #
 # Name server entries for foobar.org:
-#  conference.foobar.org.                        300 IN A 12.34.56.78                  # muc component
-#  conference.foobar.org.                        300 IN AAAA 2a02:1234:5678::72:1      # muc component
-#  proxy.foobar.org.                             300 IN A 12.34.56.78                  # proxy65 component
-#  proxy.foobar.org.                             300 IN AAAA 2a02:1234:5678::72:1      # proxy65 component
-#  upload.foobar.org.                            300 IN A 12.34.56.78                  # upload component
-#  upload.foobar.org.                            300 IN AAAA 2a02:1234:5678::72:1      # upload component
-#  pubsub.foobar.org.                            300 IN A 12.34.56.78                  # pubsub component
-#  pubsub.foobar.org.                            300 IN AAAA 2a02:1234:5678::72:1      # pubsub component
+#  conference.foobar.org.                        300 CNAME xmpp.example.com            # muc component
+#  proxy.foobar.org.                             300 CNAME xmpp.example.com            # proxy65 component
+#  upload.foobar.org.                            300 CNAME xmpp.example.com            # upload component
+#  pubsub.foobar.org.                            300 CNAME xmpp.example.com            # pubsub component
 #  _xmpp-client._tcp.foobar.org.                 300 IN SRV 0 5 5222 xmpp.example.com.
 #  _xmpps-client._tcp.foobar.org.                300 IN SRV 0 5 5223 xmpp.example.com.  # legacy SSL port is 5223, see below
 #  _xmpp-server._tcp.foobar.org.                 300 IN SRV 0 5 5269 xmpp.example.com.
@@ -51,14 +47,10 @@
 #  _xmppconnect.foobar.org.                      300 IN TXT "_xmpp-client-websocket=wss://xmpp.example.com/xmpp-websocket"      # websocket
 #
 # Name server entries for server.net:
-#  muc.server.net.                              300 IN A 12.34.56.78                  # muc component
-#  muc.server.net.                              300 IN AAAA 2a02:1234:5678::72:1      # muc component
-#  proxy65.server.net.                          300 IN A 12.34.56.78                  # proxy65 component
-#  proxy65.server.net.                          300 IN AAAA 2a02:1234:5678::72:1      # proxy65 component
-#  uploads.server.net.                          300 IN A 12.34.56.78                  # upload component
-#  uploads.server.net.                          300 IN AAAA 2a02:1234:5678::72:1      # upload component
-#  pubsub.server.net.                           300 IN A 12.34.56.78                  # pubsub component
-#  pubsub.server.net.                           300 IN AAAA 2a02:1234:5678::72:1      # pubsub component
+#  muc.server.net.                              300 CNAME xmpp.example.com            # muc component
+#  proxy65.server.net.                          300 CNAME xmpp.example.com            # proxy65 component
+#  uploads.server.net.                          300 CNAME xmpp.example.com            # upload component
+#  pubsub.server.net.                           300 CNAME xmpp.example.com            # pubsub component
 #  _xmpp-client._tcp.server.net.                300 IN SRV 0 5 5222 xmpp.example.com.
 #  _xmpps-client._tcp.server.net.               300 IN SRV 0 5 5225 xmpp.example.com.  # legacy SSL port is 5225, see below
 #  _xmpp-server._tcp.server.net.                300 IN SRV 0 5 5269 xmpp.example.com.
