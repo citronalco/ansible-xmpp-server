@@ -60,6 +60,8 @@
 #  _xmppconnect.server.net.                     300 IN TXT "_xmpp-client-xbosh=https://xmpp.example.com/http-bind"             # bosh
 #  _xmppconnect.server.net.                     300 IN TXT "_xmpp-client-websocket=wss://xmpp.example.com/xmpp-websocket"      # websocket
 #
+# You may also use A/AAAA records instead of CNAME.
+#
 #### 2. RUN THE PLAYBOOK
 # ansible-playbook -i hosts.example xmpp.yml
 #
