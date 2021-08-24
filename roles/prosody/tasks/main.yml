@@ -195,3 +195,23 @@
     state: absent
   loop: "{{ prosody.xmpp_domains }}"
   when: item.delete_uploads_after_days is not defined
+
+
+# Set up Prosody http_libjs module
+- name: Create directories for Javascript libraries
+  file:
+    path: "{{ item }}"
+    mode: "0755"
+  loop:
+    - "/usr/local/lib/prosody-libjs/jquery"
+    - "/usr/local/lib/prosody-libjs/bootstrap4"
+
+- name: Download Javascript libraries
+  get_url:
+    url: "{{ item.url }}"
+    dest: "/usr/local/lib/prosody-libjs/{{ item.subdir }}/"
+    mode: "0644"
+  loop:
+    - { url: "https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js", subdir: "jquery" }
+    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js", subdir: "bootstrap4" }
+    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css", subdir: "bootstrap4" }
