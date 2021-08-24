@@ -24,7 +24,8 @@ contact_info = {
 authentication = "{{ item.authentication_provider | default("internal_hashed") }}"
 
 -- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap) [XEP-0077] (default: false)
-allow_registration = {{ item.allow_registration | default(false) | ternary("true", "false") }}
+-- If mod_invites is loaded registrations are restricted to users with invitations from existing users
+allow_registration = {{ (item.allow_registration == true or item.allow_registration == "invite") | ternary('true', 'false') if item.allow_registration is defined else 'false' }}
 
 -- Archiving configuration
 archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived messages after XXX days (default: 7d)
@@ -50,6 +51,23 @@ conversejs_tags = {
 	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
 }
 
+{% if item.allow_registration is defined and item.allow_registration == 'invite' %}
+-- Invite-based account registration [XEP-0401]
+modules_enabled = {
+        "invites";
+        "invites_adhoc";
+        "invites_page";
+        "invites_register";
+        "invites_register_web";
+        "http_libjs";
+}
+-- mod_invites_adhoc
+allow_user_invites = true; -- allow non-admin users to invite contacts to register on this server (default: false)
+-- mod_invites_page
+invites_page = "http://localhost:5280/invites_page?{invite_token}"; -- URL to Prosody's "invites" web pages (default: "https://{host}:5281/invites_page?{invite_token}")
+site_name = "{{ item.name }} Messenger Service"; -- the friendly name of this server (default: "example.com")
+
+{% endif %}
 
 ------ Components ------
 --- Set up a MUC (multi-user chat) room server: [XEP-0045]

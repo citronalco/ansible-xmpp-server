@@ -23,7 +23,7 @@ prosody:
 
       legacy_ssl_port: 5223
 
-      allow_registration: false		# User nur manuell anlegen
+      allow_registration: invite	# Neue User per "invite" von bestehenden Usern einladen lassen
 
       max_upload_mbyte: 100		# Max. Dateiuploadgröße (optional, Standard: 100)
 

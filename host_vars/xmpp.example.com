@@ -128,7 +128,11 @@ prosody:
       legacy_ssl_port: 5223			# port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
       authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
-      allow_registration: true			# allow anyone to register within a XMPP client (default: false, does not work if "authentication_provider = imap")
+      allow_registration: invite		# possible values: true, false, invite (optional, default: false)
+    						#  true: allow anyone to register within a XMPP client
+    						#  false: users have to be created manually by the server admin with "prosodyctl adduser <JID>"
+    						#  invite: allow existing users to invite new users
+    						# no effect if "authentication_provider = imap", new users must be created on the IMAP server in that case
       max_upload_mbyte: 1000			# max. file upload size in MByte (default: 100)
       delete_uploads_after_days: 31		# delete uploaded files after XX days. (default: never)
       delete_messages_after_days: 31		# delete archived messages after XX days. (default: never)
