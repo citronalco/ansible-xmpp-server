@@ -4,6 +4,7 @@
 # - reverse proxy for BOSH (URL: https://{{ prosody.web_domain.name }}/http-bind)
 # - reverse proxy for BOSH-Autoconfiguration (XEP-0156)
 # - reverse proxy for Websocket (URL: https://{{ prosody.web_domain.name }}/xmpp-websocket)
+# - reverse proxy for Prosody's invite based user registration
 
 <VirtualHost *:80>
     ServerName {{ prosody.web_domain.name }}
@@ -61,7 +62,7 @@
 
     ###############################
 
-    # Static root page for some content
+    #### Static root page for some content
     <Location "/">
         Require all granted
         DirectoryIndex index.html
@@ -90,28 +91,36 @@
     ProxyPass /.well-known http://localhost:5280/.well-known
     ProxyPassReverse /.well-known http://localhost:5280/.well-known
 
+    # Invites: Required Javascript libraries
+    Alias /share /usr/local/lib/prosody-libjs
+    <Location "/share">
+        Require all granted
+    </Location>
 
-    #### MOVIM #### (TODO)
-    # Requires Service "Movim"
-    # Movim configuration (taken from the Debian package)
-    #ProxyPass /movim/ws/ ws://127.0.0.1:8080/
+    # Invites web pages
+{% for domain in prosody.xmpp_domains %}
+     <Location /{{ domain.name }}/register_apps>
+        ProxyPreserveHost on
+        RequestHeader set Host "{{ domain.name }}"
+        ProxyPass http://localhost:5280/{{ domain.name }}/register_apps
+        ProxyPassReverse http://localhost:5280/{{ domain.name }}/register_apps
+    </Location>
 
-    #Alias /movim/ /usr/local/movim/public/
-    #<Directory /usr/local/movim/public>
-    #    Options +FollowSymlinks -Indexes
-    #    AllowOverride FileInfo Options
-    #</Directory>
+    <Location /{{ domain.name }}/invites>
+        ProxyPreserveHost on
+        RequestHeader set Host "{{ domain.name }}"
+        ProxyPass http://localhost:5280/{{ domain.name }}/invites
+        ProxyPassReverse http://localhost:5280/{{ domain.name }}/invites
+    </Location>
 
-    #Alias /movim/cache/ /usr/local/movim/cache/
-    #<Directory /usr/local/movim/cache>
-    #    Options -Indexes
-    #</Directory>
+    <Location /{{ domain.name }}/register>
+        ProxyPreserveHost on
+        RequestHeader set Host "{{ domain.name }}"
+        ProxyPass http://localhost:5280/{{ domain.name }}/register
+        ProxyPassReverse http://localhost:5280/{{ domain.name }}/register
+    </Location>
 
-    #<Location /movim/>
-    #    Header set Access-Control-Allow-Origin "*"
-    #    DirectoryIndex index.php
-    #</Location>
-
+{% endfor %}
 
     #### CONVERSE.JS ####
     ### Set up Converse.js infrastructure for Prosody's mod_conversejs
@@ -157,6 +166,4 @@
         Require all granted
     </Location>
 
-    # Redirect / to conversejs-bingo
-    #RedirectMatch ^/$ /conversejs-bingo
 </VirtualHost>

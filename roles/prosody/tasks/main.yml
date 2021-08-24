@@ -197,14 +197,16 @@
   when: item.delete_uploads_after_days is not defined
 
 
-# Set up Prosody http_libjs module
+# Set up required Javascript libraries for Prosody's mod_invite
 - name: Create directories for Javascript libraries
   file:
     path: "{{ item }}"
+    state: directory
     mode: "0755"
   loop:
     - "/usr/local/lib/prosody-libjs/jquery"
-    - "/usr/local/lib/prosody-libjs/bootstrap4"
+    - "/usr/local/lib/prosody-libjs/bootstrap4/css"
+    - "/usr/local/lib/prosody-libjs/bootstrap4/js"
 
 - name: Download Javascript libraries
   get_url:
@@ -213,5 +215,5 @@
     mode: "0644"
   loop:
     - { url: "https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js", subdir: "jquery" }
-    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js", subdir: "bootstrap4" }
-    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css", subdir: "bootstrap4" }
+    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css", subdir: "bootstrap4/css" }
+    - { url: "https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js", subdir: "bootstrap4/js" }
