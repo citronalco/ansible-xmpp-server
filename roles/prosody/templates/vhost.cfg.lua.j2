@@ -89,7 +89,9 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_cloud_notify"; -- enable push notifications for iOS devices
 	}
 	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
-	muc_room_default_history_length = 200 ; -- keep the last 200 messages (default: 20)
+	muc_room_default_history_length = 200 ; -- keep the last 200 messages by default (default: 20)
+	max_history_messages = 200; -- room can be configured to keep at max 200 messages (default: 20)
+
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000

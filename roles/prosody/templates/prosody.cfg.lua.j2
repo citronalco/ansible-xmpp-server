@@ -92,6 +92,7 @@ modules_enabled = {
 		-- "log_auth"; -- On failed authentication attempts log IP address (useful for fail2ban)
 		"limit_auth"; -- Throttle authentication attempts
 		"block_registrations"; -- Prevent registration of certain reserved account names
+		"register_limits"; -- Throttle new registrations
 		-- "offline_email"; -- Forward messages to offline users per email (JID must equal email address)
 
 	-- Client State Indicators
@@ -194,6 +195,9 @@ pep_max_items = 10000; -- required for Movim web client (see https://github.com/
 
 -- mod_block_registrations:
 block_registrations_users = { "admin", "admins", "administrator", "administrators", "serveradmin", "serveradmins", "root", "xmpp", "jabber", "master" }; -- forbidden usernames for new users
+
+-- mod_register_limits:
+min_seconds_between_registrations = 300; -- number of seconds a client at a particular IP address must wait before it can register another account (default: 0)
 
 -- mod_conversejs:
 conversejs_resources = "/usr/local/conversejs/conversejs/package/dist"; -- use a local provided converse.js (default: unset -> use CDN)
