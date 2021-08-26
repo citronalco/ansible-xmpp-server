@@ -32,22 +32,36 @@ archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") i
 
 -- mod_conversejs:
 conversejs_options = {
+	-- GUI
 	view_mode = "fullscreen";
-	play_sounds = true;
-	discover_connection_methods = true; -- enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
+	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
 	i18n = "de"; -- language autodetection is flaky (see https://github.com/conversejs/converse.js/issues/2381), force German as default (default: unset -> autodetect)
+	show_controlbox_by_default = true; -- Mobile devices: Always show the box containing contacts and rooms (default: false)
+	sticky_controlbox = true; -- Mobile devices: Remove close button from box containing contacts and rooms (default: false)
+	allow_logout = false; -- Hide log out button (default: true)
+	allow_user_trust_override = false; -- Do not ask the user if she is using a trusted device (default: true)
+	play_sounds = true; -- Play sound on new messages (default: false)
+	-- omemo_default = true; -- Use OMEMO encryption by default if chat supports it (default: false)
+
+	-- Connection to XMPP server
+	discover_connection_methods = true; -- enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
+	auto_reconnect = true; -- on network failures try to reconnect automatically (default: false)
+	enable_smacks = true; -- enable support for stream management (XEP-0198)
+	message_archiving_timeout = "60000"; -- Amount of time (in ms) to wait when requesting archived message from the server (default: 20000)
+
+	-- User status
 	csi_waiting_time = "10"; -- after XX seconds set user status to "inactive" (default: 0 -> never)
 	auto_away = "180"; -- after XX seconds set user status to "away" (default: 0 -> never)
 	auto_xa = "600"; -- after XX seconds set user status to "extended away" (default: 0 -> never)
-	auto_reconnect = true; -- on network failures try to reconnect automatically (default: false)
+
+	-- Message handling
 	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
 	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
+
+	-- MUC
 	auto_register_muc_nickname = true; -- automatically register user's nickname in MUC (default: false)
-	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
-	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server (default: false)
-	enable_smacks = true; -- enable support for stream management (XEP-0198)
-	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
-	message_archiving_timeout = "60000"; -- Amount of time (in ms) to wait when requesting archived message from the server (default: 20000)
+	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain name)
+	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically fetch all public rooms on this server (default: false)
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
