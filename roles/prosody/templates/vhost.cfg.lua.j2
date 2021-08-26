@@ -46,7 +46,6 @@ conversejs_options = {
 	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain)
 	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server (default: false)
 	enable_smacks = true; -- enable support for stream management (XEP-0198)
-	default_domain = "{{ item.name }}"; -- users from this domain can login with only the user part of their JID
 	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
 }
 conversejs_tags = {
