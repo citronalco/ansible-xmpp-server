@@ -202,6 +202,19 @@ block_registrations_users = { "admin", "admins", "administrator", "administrator
 -- mod_register_limits:
 min_seconds_between_registrations = 300; -- number of seconds a client at a particular IP address must wait before it can register another account (default: 0)
 
+-- mod_limits:
+-- recommendations from https://prosody.im/doc/public_servers
+limits = {
+    c2s = {
+	rate = "3kb/s";
+	burst = "2s";
+    };
+    s2sin = {
+	rate = "30kb/s";
+	burst = "3s";
+    };
+}
+
 -- mod_conversejs:
 conversejs_resources = "/usr/local/conversejs/conversejs/package/dist"; -- use a local provided converse.js (default: unset -> use CDN)
 
