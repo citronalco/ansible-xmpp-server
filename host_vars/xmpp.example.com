@@ -5,17 +5,17 @@
 
 
 ##### EXAMPLE:
-# In this example we're setting up a XMPP server for two XMPP domains:
+# In this example we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains:
 # - foobar.org:
-#   Open for anyone, users can register with their XMPP client
+#   Users can register with their XMPP client, open for anyone.
 # - server.net:
-#   Restricted to users who already have an account on the IMAP server mail.server.net.
-#   Any of them can immediatelly use the XMPP server, no extra registration required.
-#   JIDs: <IMAP-username>@server.net, password: <IMAP-password>
+#   Restricted to users who already have an account on the IMAP server "mail.server.net".
+#   Valid IMAP users can immediatelly use the XMPP server, no extra registration required.
+#   (JIDs: <IMAP-username>@server.net, password: <IMAP-password>)
 #
-# "xmpp.example.com" will be used for BOSH, websockets, STUN/TURN server, Converse.js and a info web page, for all XMPP domains.
+# "xmpp.example.com" will be used for BOSH, websockets, STUN/TURN server, Converse.js and a info web page - for both XMPP domains.
 #
-# The example server you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
+# The example server "xmpp.example.com" you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
 #
 #### PREREQUISITES:
 # - TLS certificate and private key of foobar.org and server.net
@@ -23,7 +23,7 @@
 # - Access to the DNS configuration of foobar.org, server.net and example.com to add some entries
 #
 #### 1. DNS CONFIGURATION
-# DNS configuration must be set up BEFORE installing this playbook, so let's start with this:
+# DNS configuration must be set up BEFORE installing this playbook, so start with this!
 # XMPP clients and servers heavily use DNS to figure out possible connection methods.
 # So quite a few DNS entries in the name servers for foobar.org, server.net and xmpp.example.com are required.
 # Please not the subtile differences between the DNS entries for foobar.org and server.net and how they correspond with the component's host names in the configuration below.
@@ -72,7 +72,7 @@
 #   /etc/prosody/certs/server.net/privkey.pem
 #   /etc/prosody/certs/server.net/fullchain.pem
 # Then change ownership on those files to the user "prosody" and execute "sudo prosodyctl reload". Do the same when updating certificates/keys.
-# All other certificates are created and updated automatically. 
+# All other certificates are created and updated automatically.
 #
 #### 4. SET UP well-known URLs
 # Some XMPP clients query so called well-known URLs to figure out a domain's XMPP server.
