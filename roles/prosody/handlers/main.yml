@@ -1,8 +1,8 @@
+- name: reread systemd configs
+  systemd:
+    daemon_reload: yes
+
 - name: restart prosody
   service:
     name: prosody.service
     state: restarted
-
-- name: reread systemd configs
-  systemd:
-    daemon_reload: yes

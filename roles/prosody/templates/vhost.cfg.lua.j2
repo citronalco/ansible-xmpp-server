@@ -35,7 +35,6 @@ conversejs_options = {
 	-- GUI
 	view_mode = "fullscreen";
 	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
-	i18n = "de"; -- language autodetection is flaky (see https://github.com/conversejs/converse.js/issues/2381), force German as default (default: unset -> autodetect)
 	show_controlbox_by_default = true; -- Mobile devices: Always show the box containing contacts and rooms (default: false)
 	sticky_controlbox = true; -- Mobile devices: Remove close button from box containing contacts and rooms (default: false)
 	allow_logout = false; -- Hide log out button (default: true)
@@ -95,7 +94,7 @@ http_paths = {
 ------ Components ------
 --- Set up a MUC (multi-user chat) room server: [XEP-0045]
 Component "{{ item.components.muc }}" "muc"
-	restrict_room_creation = false; -- everyone can create rooms
+	restrict_room_creation = "local"; -- only users from this domain can create rooms (default: false)
 	modules_enabled = {
 	    "muc_limits"; -- limit max. event rate in a MUC room
 	    "muc_mam"; -- enable archiving of MUC messages
@@ -105,7 +104,6 @@ Component "{{ item.components.muc }}" "muc"
 	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
 	muc_room_default_history_length = 200 ; -- keep the last 200 messages by default (default: 20)
 	max_history_messages = 200; -- room can be configured to keep at max 200 messages (default: 20)
-
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000

@@ -72,7 +72,7 @@ prosody:
 
 
 conversejs:
-  conversejs_release_tag: v6.0.1
+  conversejs_release_tag: v7.0.6
   libsignal_release_tag: v1.3.0
 
 

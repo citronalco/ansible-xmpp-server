@@ -168,7 +168,7 @@ prosody:
         - chef@server.net
 
       conversejs:
-        weblocation: /conversejs-bingo
+        weblocation: /conversejs-servernet
 
 
 
