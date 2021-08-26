@@ -47,6 +47,7 @@ conversejs_options = {
 	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically list all public rooms on this server (default: false)
 	enable_smacks = true; -- enable support for stream management (XEP-0198)
 	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
+	message_archiving_timeout = "60000"; -- Amount of time (in ms) to wait when requesting archived message from the server (default: 20000)
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
