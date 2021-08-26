@@ -13,6 +13,7 @@
     - prosody
     - lua51-luadbi
     - lua51-luaevent
+    - telnet
 
 - name: Create directory for systemd service override
   file:
