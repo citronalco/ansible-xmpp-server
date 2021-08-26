@@ -91,9 +91,12 @@ modules_enabled = {
 		-- "proxy65"; -- Enables a file transfer proxy service which clients behind NAT can use [XEP-0065] -- enabled below as Component
 		-- "log_auth"; -- On failed authentication attempts log IP address (useful for fail2ban)
 		"limit_auth"; -- Throttle authentication attempts
+		-- "offline_email"; -- Forward messages to offline users per email (JID must equal email address)
+
+	-- User management
 		"block_registrations"; -- Prevent registration of certain reserved account names
 		"register_limits"; -- Throttle new registrations
-		-- "offline_email"; -- Forward messages to offline users per email (JID must equal email address)
+		"lastlog"; -- Store timestamp of user's latest log in
 
 	-- Client State Indicators
 		"csi"; -- Client state indication [XEP-0352]
