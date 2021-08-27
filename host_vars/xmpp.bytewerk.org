@@ -38,6 +38,13 @@ prosody:
 
       conversejs:
         weblocation: /conversejs-bytewerk
+        auto_join_rooms:
+          - bingo-users@conference.bingo-ev.de
+          - bytewerk@conference.bytewerk.org
+        community_plugins:
+          - muc-directory		# MUC-Verzeichnis
+          - stickers			# Lustige Sticker
+          - vmsg			# Sprachnachrichten
 
       testuser:				# Automatisch Testuser für NRPE anlegen
         name: "nrpe-testuser"
@@ -69,6 +76,12 @@ prosody:
 
       conversejs:
         weblocation: /conversejs-bingo
+        auto_join_rooms:
+          - bingo-users@conference.bingo-ev.de
+        community_plugins:
+          - muc-directory		# MUC-Verzeichnis
+          - stickers			# Lustige Sticker
+          - vmsg			# Sprachnachrichten
 
 
 conversejs:

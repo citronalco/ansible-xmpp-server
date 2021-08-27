@@ -32,3 +32,18 @@
     dest: "/usr/local/conversejs/libsignal-protocol-javascript"
     clone: yes
     update: yes
+
+# Install Community Plugins
+- name: Install git
+  zypper:
+    name: ['git' ]
+
+- name: Download community plugins
+  git:
+    repo: "https://github.com/conversejs/community-plugins.git"
+    dest: "/usr/local/conversejs/community-plugins"
+    clone: yes
+    update: yes
+  tags:
+    - skip_ansible_lint
+
