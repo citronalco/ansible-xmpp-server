@@ -15,7 +15,6 @@
 - name: Create database
   become: yes
   become_user: postgres
-#  become_method: sudo
   postgresql_db:
     name: "{{ postgresql.databasename | default('prosody') }}"
 
