@@ -32,6 +32,8 @@ archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") i
 
 -- mod_conversejs:
 conversejs_options = {
+	sounds_path = "https://{{ prosody.web_domain.name }}/conversejs/dist/sounds/"; -- URL to sound files (default: "/sounds/")
+
 	-- GUI
 	view_mode = "fullscreen";
 	theme = "concord"; -- Select theme. "default" is the light theme, "concord" the dark theme (default: "default")
@@ -62,10 +64,24 @@ conversejs_options = {
 	auto_register_muc_nickname = true; -- Automatically register user's nickname from vCard in MUC (default: false)
 	muc_domain = "{{ item.components.muc }}"; -- Default domain for new MUCs (default: unset -> users have to type in MUC domain name)
 	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- Automatically fetch all public rooms on this server (default: false)
+{% if item.conversejs.auto_join_rooms is defined %}
+	auto_join_rooms = { {% for room in item.conversejs.auto_join_rooms %}{{ "{ jid = \"%s\", minimized = true }" | format(room) }}{% if not loop.last %}, {% endif %}{% endfor %} }; -- Automatically join this MUCs after logging in
+{% endif %}
+{% if item.conversejs.community_plugins is defined %}
+	whitelisted_plugins = { {{ item.conversejs.community_plugins | default([]) | map("to_json") | join(", ") }} }; -- Enable community modules
+{% endif %}
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
 	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
+{% if item.conversejs.community_plugins is defined %}
+
+	-- Load community plugins
+{% for plugin in item.conversejs.community_plugins %}
+	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-community-plugins/{{ plugin }}/{{ plugin }}.js"></script>]];
+	[[<link type="text/css" rel="stylesheet" media="screen" href="https://{{ prosody.web_domain.name }}/conversejs-community-plugins//{{ plugin }}/{{ plugin }}.css" />]];
+{% endfor %}
+{% endif %}
 }
 
 {% if item.allow_registration is defined and item.allow_registration == 'invite' %}

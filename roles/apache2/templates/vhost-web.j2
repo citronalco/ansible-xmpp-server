@@ -154,9 +154,9 @@
         Require all granted
     </Location>
 
-    # Workaround: Converse.js expects its sound files in /sounds/
-    Alias /sounds /usr/local/conversejs/conversejs/package/dist
-    <Location /sounds>
+    # community plugins
+    Alias /conversejs-community-plugins /usr/local/conversejs/community-plugins/packages
+    <Location /conversejs-community-plugins>
         Require all granted
     </Location>
 
