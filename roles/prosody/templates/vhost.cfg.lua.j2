@@ -34,7 +34,7 @@ archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") i
 conversejs_options = {
 	-- GUI
 	view_mode = "fullscreen";
-	theme = "concord"; -- Select theme. "default" is the light theme, "concord" the dark theme (default: "default")
+	theme = "concord"; -- select theme. "default" is the light theme, "concord" the dark theme (default: "default")
 	show_controlbox_by_default = true; -- Mobile devices: Always show the box containing contacts and rooms (default: false)
 	sticky_controlbox = true; -- Mobile devices: Remove close button from box containing contacts and rooms (default: false)
 	allow_logout = false; -- Hide log out button (default: true)
@@ -43,25 +43,25 @@ conversejs_options = {
 	-- omemo_default = true; -- Use OMEMO encryption by default if chat supports it (default: false)
 
 	-- Connection to XMPP server
-	discover_connection_methods = true; -- Enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
-	auto_reconnect = true; -- On network failures try to reconnect automatically (default: false)
-	enable_smacks = true; -- Enable support for stream management (XEP-0198)
+	discover_connection_methods = true; -- enable users from XMPP domains not hosted on this server. Seems to break everything if conversejs_resources/_cdn is set. (default: false)
+	auto_reconnect = true; -- on network failures try to reconnect automatically (default: false)
+	enable_smacks = true; -- enable support for stream management (XEP-0198)
 	message_archiving_timeout = "60000"; -- Amount of time (in ms) to wait when requesting archived message from the server (default: 20000)
 
 	-- User status
-	csi_waiting_time = "10"; -- After XX seconds set user status to "inactive" (default: 0 -> never)
-	auto_away = "180"; -- After XX seconds set user status to "away" (default: 0 -> never)
-	auto_xa = "600"; -- After XX seconds set user status to "extended away" (default: 0 -> never)
+	csi_waiting_time = "10"; -- after XX seconds set user status to "inactive" (default: 0 -> never)
+	auto_away = "180"; -- after XX seconds set user status to "away" (default: 0 -> never)
+	auto_xa = "600"; -- after XX seconds set user status to "extended away" (default: 0 -> never)
 
 	-- Message handling
-	allow_non_roster_messaging = true; -- Receive message from users not in the roster, like in conversations.im (default: false)
-	allow_chat_pending_contacts = true; -- Allow users to chat with pending contacts, like in conversations.im (default: false)
-	allow_message_corrections = "last"; -- Users can only edit their last sent message (default: true)
+	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
+	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
+	allow_message_corrections = "last"; -- users can only edit their last sent message (default: true)
 
 	-- MUC
-	auto_register_muc_nickname = true; -- Automatically register user's nickname from vCard in MUC (default: false)
-	muc_domain = "{{ item.components.muc }}"; -- Default domain for new MUCs (default: unset -> users have to type in MUC domain name)
-	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- Automatically fetch all public rooms on this server (default: false)
+	auto_register_muc_nickname = true; -- automatically register user's nickname from vCard in MUC (default: false)
+	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain name)
+	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically fetch all public rooms on this server (default: false)
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
@@ -78,11 +78,11 @@ modules_enabled = {
 	"invites_register_web";
 }
 -- mod_invites_adhoc
-allow_user_invites = true; -- Allow non-admin users to invite contacts to register on this server (default: false)
+allow_user_invites = true; -- allow non-admin users to invite contacts to register on this server (default: false)
 -- mod_invites_page
-site_name = "{{ item.name }} Messenger Service"; -- The friendly name of this server (default: "example.com")
+site_name = "{{ item.name }} Messenger Service"; -- the friendly name of this server (default: "example.com")
 -- mod_invites_register_web
-webchat_url = "https://{{ prosody.web_domain.name }}/{{ item.conversejs.weblocation }}"; -- External URL to converse.js (default: http_path of conversejs)
+webchat_url = "https://{{ prosody.web_domain.name }}/{{ item.conversejs.weblocation }}"; -- external URL to converse.js (default: http_path of conversejs)
 -- Change URLs for mod_invites to support multiple domains
 http_paths = {
 	register_apps = "/{{ item.name }}/register_apps";
@@ -95,29 +95,30 @@ http_paths = {
 ------ Components ------
 --- Set up a MUC (multi-user chat) room server: [XEP-0045]
 Component "{{ item.components.muc }}" "muc"
-	restrict_room_creation = "local"; -- Only users from this domain can create rooms (default: false)
+	restrict_room_creation = "local"; -- only users from this domain can create rooms (default: false)
 	modules_enabled = {
-	    "muc_limits"; -- Limit max. event rate in a MUC room
-	    "muc_mam"; -- Enable archiving of MUC messages
-	    "vcard_muc"; -- Enable vCards for MUC rooms (i.e. set an avatar for a MUC)
-	    -- "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
-	    "muc_cloud_notify"; -- Enable push notifications for iOS devices
+	    "muc_limits"; -- limit max. event rate in a MUC room
+	    "muc_mam"; -- enable archiving of MUC messages
+	    "vcard_muc"; -- enable vCards for MUC rooms (i.e. set an avatar for a MUC)
+	    -- "muc_moderation"; -- enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
+	    "muc_cloud_notify"; -- enable push notifications for iOS devices
 	}
-	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
-	muc_room_default_history_length = 200 ; -- Keep the last 200 messages by default (default: 20)
-	max_history_messages = 200; -- Room can be configured to keep at max 200 messages (default: 20)
+	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
+	muc_room_default_history_length = 200 ; -- keep the last 200 messages by default (default: 20)
+	max_history_messages = 200; -- room can be configured to keep at max 200 messages (default: 20)
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
 Component "{{ item.components.proxy65 }}" "proxy65"
+	-- proxy65_acl = { "{{ item.name }}" }; -- do NOT enable, would limit proxy65 usage to internal usage
 
 -- PubSub ("Publish-Subscribe") [XEP-0060]
 Component "{{ item.components.pubsub }}" "pubsub"
-	pubsub_max_items = 10000; -- Required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody (default: 256)
+	pubsub_max_items = 10000; -- required for Movim, see https://github.com/movim/movim/wiki/Configure%20prosody
 
 -- Handle file uploads with external webserver and share_v2.php (file is provided by mod_http_upload_external) [XEP-0363]
 Component "{{ item.components.upload }}" "http_upload_external"
 	http_upload_external_base_url = "https://{{ item.components.upload }}/s/"; -- URL to share_v2.php script
-	http_upload_external_secret = "{{ uploadpwd[item.name] }}"; -- Shared secret, must also be entered in share_v2.php
-	http_upload_external_file_size_limit = {{ item.max_upload_mbyte | default(100) }}*1024*1024; -- Max. upload size in bytes (default: 100 MByte)
-	http_upload_external_protocol = "v2"; -- See docs of mod_http_upload_external (default: unset)
+	http_upload_external_secret = "{{ uploadpwd[item.name] }}"; -- shared secret, must also be entered in share_v2.php
+	http_upload_external_file_size_limit = {{ item.max_upload_mbyte | default(100) }}*1024*1024; -- max. upload size in bytes (default: 100 MByte)
+	http_upload_external_protocol = "v2"; -- see docs of mod_http_upload_external
