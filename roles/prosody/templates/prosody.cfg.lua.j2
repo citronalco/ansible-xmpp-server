@@ -116,7 +116,7 @@ modules_enabled = {
 		 "external_services"; -- Inform clients about our STUN+TURN server (depends on mod_extdisco, can be omitted with Prosody <= 0.12)
 
 	-- Converse.js
-		"conversejs"; -- serve a small HTML snippet in http://<virtualhost>:5280/conversejs
+		"conversejs"; -- Serve a small HTML snippet in http://<virtualhost>:5280/conversejs
 
 }
 
@@ -176,7 +176,7 @@ external_services = {
 -- mod_bosh: listens on /http-bind
 -- bosh_max_inactivity = 60; -- Maximum amount of time in seconds a client may remain silent for, with no requests, before getting kicked (default: 60)
 cross_domain_bosh = true; -- CORS header for BOSH (either list of domains or "true" for *) (default: hostname or, if, set, host in "http_external_url")
-consider_bosh_secure = true; -- allow operations requiring encryption over plain HTTP (i.e. when using a reverse proxy for HTTPS) (default: false)
+consider_bosh_secure = true; -- Allow operations requiring encryption over plain HTTP (i.e. when using a reverse proxy for HTTPS) (default: false)
 
 -- mod_websocket: listens on /xmpp-websocket
 cross_domain_websocket = true; -- CORS header for websocket (either list of domains or "true" for *) (default: hostname or, if, set, host in "http_external_url")
@@ -195,16 +195,16 @@ imap_auth_port = {{ prosody.imap_auth.port }}
 
 {% endif %}
 -- mod_pubsub:
-pep_max_items = 10000; -- required for Movim web client (see https://github.com/movim/movim/wiki/Configure%20prosody)
+pep_max_items = 10000; -- Required for Movim web client (see https://github.com/movim/movim/wiki/Configure%20prosody)
 
 -- mod_block_registrations:
-block_registrations_users = { "admin", "admins", "administrator", "administrators", "serveradmin", "serveradmins", "root", "xmpp", "jabber", "master" }; -- forbidden usernames for new users
+block_registrations_users = { "admin", "admins", "administrator", "administrators", "serveradmin", "serveradmins", "root", "xmpp", "jabber", "master" }; -- Forbidden usernames for new users
 
 -- mod_register_limits:
-min_seconds_between_registrations = 300; -- number of seconds a client at a particular IP address must wait before it can register another account (default: 0)
+min_seconds_between_registrations = 300; -- Number of seconds a client at a particular IP address must wait before it can register another account (default: 0)
 
 -- mod_limits:
--- recommendations from https://prosody.im/doc/public_servers
+-- Recommendations from https://prosody.im/doc/public_servers
 limits = {
     c2s = {
 	rate = "3kb/s";
@@ -217,7 +217,7 @@ limits = {
 }
 
 -- mod_conversejs:
-conversejs_resources = "/usr/local/conversejs/conversejs/package/dist"; -- use a local provided converse.js (default: unset -> use CDN)
+conversejs_resources = "/usr/local/conversejs/conversejs/package/dist"; -- Use a local provided converse.js (default: unset -> use CDN)
 
 -----------------------------------------
 

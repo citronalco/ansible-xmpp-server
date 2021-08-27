@@ -56,9 +56,10 @@ conversejs_options = {
 	-- Message handling
 	allow_non_roster_messaging = true; -- receive message from users not in the roster, like in conversations.im (default: false)
 	allow_chat_pending_contacts = true; -- allow users to chat with pending contacts, like in conversations.im (default: false)
+	allow_message_corrections = "last"; -- users can only edit their last sent message (default: true)
 
 	-- MUC
-	auto_register_muc_nickname = true; -- automatically register user's nickname in MUC (default: false)
+	auto_register_muc_nickname = true; -- automatically register user's nickname from vCard in MUC (default: false)
 	muc_domain = "{{ item.components.muc }}"; -- default domain for new MUCs (default: unset -> users have to type in MUC domain name)
 	auto_list_rooms = {{ item.conversejs.auto_list_rooms | default(true) | ternary("true", "false") }}; -- automatically fetch all public rooms on this server (default: false)
 }
@@ -98,7 +99,8 @@ Component "{{ item.components.muc }}" "muc"
 	modules_enabled = {
 	    "muc_limits"; -- limit max. event rate in a MUC room
 	    "muc_mam"; -- enable archiving of MUC messages
-	    "vcard_muc"; -- enable vCards for MUC rooms
+	    "vcard_muc"; -- enable vCards for MUC rooms (i.e. set an avatar for a MUC)
+	    -- "muc_moderation"; -- enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
 	    "muc_cloud_notify"; -- enable push notifications for iOS devices
 	}
 	muc_log_by_default = true; -- enable conversation logging by default (can be disabled in room config)
