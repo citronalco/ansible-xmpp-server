@@ -146,6 +146,12 @@ prosody:
       conversejs:
         auto_list_rooms: true			# automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
         weblocation: /conversejs-foobar		# offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
+        auto_join_rooms:			# add everybody using Converse.js to this MUCs (default: empty)
+          - club@conference.foobar.org
+          - h4ck3r5@muc.bar.foo.com
+        community_plugins:			# enable some modules from https://github.com/conversejs/community-plugins (default: empty)
+          - muc-directory
+          - screencast
 
       testuser:					# create a test user for NRPE (optional, default: do not create a test user)
         name: "nrpe-testuser"			# test user's jid will be "nrpe-testuser@foobar.org"

@@ -48,7 +48,7 @@ modules_enabled = {
 
 	-- Not essential, but recommended
 		"carbons"; -- Keep multiple clients in sync [XEP-0280]
-		"carbons_copies"; -- Send carbon v0 style copies of incoming messages to clients not (yet) capable of Message Carbons (XEP-0280)
+		"carbons_copies"; -- Send carbon v0 style copies of incoming messages to clients not (yet) capable of Message Carbons [XEP-0280]
 		"pep"; -- Enables users to publish their mood, activity, playing music and more [XEP-0163]
 		"private"; -- Private XML storage (for room bookmarks, etc.) [XEP-0049]
 		"blocklist"; -- Allow users to block communications with other users [XEP-0191]
@@ -111,9 +111,9 @@ modules_enabled = {
 		"s2s_auth_compat"; -- Support s2s authentication with slightly broken servers (e.g. OpenFire 3.8). See https://prosody.im/doc/certificates#server-to-server_encryption_issues
 
 	-- WebRTC/Jingle - Needs hint to TURN/STUN server. Either use "turncredentials" or "extdisco" & "external_services"
-		 -- "turncredentials";
-		 "extdisco"; -- [XEP-0215]
-		 "external_services"; -- Inform clients about our STUN+TURN server (depends on mod_extdisco, can be omitted with Prosody <= 0.12)
+		-- "turncredentials";
+		"extdisco"; -- [XEP-0215]
+		"external_services"; -- Inform clients about our STUN+TURN server (depends on mod_extdisco, can be omitted with Prosody <= 0.12)
 
 	-- Converse.js
 		"conversejs"; -- Serve a small HTML snippet in http://<virtualhost>:5280/conversejs
