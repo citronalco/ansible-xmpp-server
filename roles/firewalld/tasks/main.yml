@@ -1,0 +1,7 @@
+- name: Disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+  register: firewalld_service_result
+  failed_when: "firewalld_service_result is failed and 'Could not find the requested service' not in firewalld_service_result.msg"
