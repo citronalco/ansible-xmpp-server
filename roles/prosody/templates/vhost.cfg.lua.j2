@@ -32,15 +32,12 @@ archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") i
 
 -- mod_conversejs:
 conversejs_options = {
-	sounds_path = "https://{{ prosody.web_domain.name }}/conversejs/dist/sounds/"; -- URL to sound files (default: "/sounds/")
-
 	-- GUI
 	view_mode = "fullscreen";
 	theme = "concord"; -- Select theme. "default" is the light theme, "concord" the dark theme (default: "default")
 	show_controlbox_by_default = true; -- Mobile devices: Always show the box containing contacts and rooms (default: false)
 	sticky_controlbox = true; -- Mobile devices: Remove close button from box containing contacts and rooms (default: false)
 	allow_logout = false; -- Hide log out button (default: true)
-	allow_user_trust_override = false; -- Do not ask the user if she is using a trusted device (default: true)
 	play_sounds = true; -- Play sound on new messages (default: false)
 	-- omemo_default = true; -- Use OMEMO encryption by default if chat supports it (default: false)
 
@@ -78,8 +75,8 @@ conversejs_tags = {
 
 	-- Load community plugins
 {% for plugin in item.conversejs.community_plugins %}
-	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-community-plugins/{{ plugin }}/{{ plugin }}.js"></script>]];
-	[[<link type="text/css" rel="stylesheet" media="screen" href="https://{{ prosody.web_domain.name }}/conversejs-community-plugins//{{ plugin }}/{{ plugin }}.css" />]];
+	[[<script src="https://{{ prosody.web_domain.name }}/packages/{{ plugin }}/{{ plugin }}.js"></script>]];
+	[[<link type="text/css" rel="stylesheet" media="screen" href="https://{{ prosody.web_domain.name }}/packages//{{ plugin }}/{{ plugin }}.css" />]];
 {% endfor %}
 {% endif %}
 }

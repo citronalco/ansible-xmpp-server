@@ -11,3 +11,4 @@
     - conversejs
     - prosody
     - nrpe
+    - firewalld
