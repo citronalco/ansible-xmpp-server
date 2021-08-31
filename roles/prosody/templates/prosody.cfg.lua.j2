@@ -126,6 +126,7 @@ modules_disabled = {
 	-- "offline"; -- Store offline messages
 	-- "c2s"; -- Handle client connections
 	-- "s2s"; -- Handle server-to-server connections
+	"websocket"; -- As of 2021/08 Conversejs/Prosody fail to keep the websocket open, which leads to a silent disconnect of Conversejs after some minutes (similar to https://github.com/conversejs/converse.js/issues/1727)
 }
 
 
