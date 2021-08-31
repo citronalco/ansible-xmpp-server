@@ -7,7 +7,7 @@ prosody:
   web_domain:
     name: "xmpp.bytewerk.org"
     admin_email: "webmaster@bingo-ev.de"
-    content_git:	# Webseite für "https://xmpp.bytewerk.org"
+    content_git:                        # Webseite für "https://xmpp.bytewerk.org"
       url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
       branch: master
 
@@ -23,12 +23,12 @@ prosody:
 
       legacy_ssl_port: 5223
 
-      allow_registration: invite	# Neue User per "invite" von bestehenden Usern einladen lassen
+      allow_registration: invite        # Neue User per "invite" von bestehenden Usern einladen lassen
 
-      max_upload_mbyte: 100		# Max. Dateiuploadgröße (optional, Standard: 100)
+      max_upload_mbyte: 100             # Max. Dateiuploadgröße (optional, Standard: 100)
 
-      delete_uploads_after_days: 31	# Uploads nach XX Tagen löschen (optional, Standard: nie)
-      delete_messages_after_days: 31	# Nachrichten nach XX Tagen löschen (optional, Standard: nie)
+      delete_uploads_after_days: 31     # Uploads nach XX Tagen löschen (optional, Standard: nie)
+      delete_messages_after_days: 31    # Nachrichten nach XX Tagen löschen (optional, Standard: nie)
 
       admin_jids:
         - sqozz@bytewerk.org
@@ -42,10 +42,10 @@ prosody:
           - bingo-users@conference.bingo-ev.de
           - bytewerk@conference.bytewerk.org
         community_plugins:
-          - muc-directory		# MUC-Verzeichnis
-          - screencast			# Bildschirmfreigabe
+          - muc-directory               # MUC-Verzeichnis
+          - screencast                  # Bildschirmfreigabe
 
-      testuser:				# Automatisch Testuser für NRPE anlegen
+      testuser:                         # Automatisch Testuser für NRPE anlegen
         name: "nrpe-testuser"
 
     - name: "bingo-ev.de"
@@ -60,7 +60,7 @@ prosody:
       legacy_ssl_port: 5225
 
       authentication_provider: imap
-      allow_registration: false		# Da "authentication_provider: imap" kann sich sowieo kein neuer User per XMPP registrieren, müssen auf Mailserver angelegt werden
+      allow_registration: false         # Da "authentication_provider: imap" kann sich sowieo kein neuer User per XMPP registrieren, müssen auf Mailserver angelegt werden
 
       max_upload_mbyte: 100
 
@@ -78,7 +78,7 @@ prosody:
         auto_join_rooms:
           - bingo-users@conference.bingo-ev.de
         community_plugins:
-          - muc-directory		# MUC-Verzeichnis
+          - muc-directory               # MUC-Verzeichnis
 
 
 conversejs:
