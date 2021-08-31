@@ -131,26 +131,23 @@
         ProxyPassReverse http://localhost:5280/conversejs
     </Location>
 
-    <Directory /usr/local/conversejs>
-        Options +FollowSymlinks
-    </Directory>
-
 {% for domain in prosody.xmpp_domains %}
     # {{ domain.name }} settings
-{% if domain.conversejs.weblocation is defined %}
-    Redirect {{ domain.conversejs.weblocation }} /{{ domain.name }}/conversejs
-{% endif %}
-    <Location /{{ domain.name }}/conversejs>
+    <Location {{ domain.conversejs.weblocation | default('/' + domain.name + '/conversejs') }}>
         # Prosody serves Converse.js configurations on all its VirtualHosts with appropriate settings. Default is "localhost"
         # Setting "{{ domain.name }}" here switches to Converse.js configuration of Prosody's VirtualHost "{{ domain.name }}"
         # This allows using some convenience settings, like allowing users from @{{ domain.name }} to log in by just typing in their username instead of the full JID
         ProxyPreserveHost on
         RequestHeader set Host "{{ domain.name }}"
-        ProxyPass http://localhost:5280/{{ domain.name }}/conversejs
-        ProxyPassReverse http://localhost:5280/{{ domain.name }}/conversejs
+        ProxyPass http://localhost:5280{{ domain.conversejs.weblocation | default('/' + domain.name + '/conversejs') }}>
+        ProxyPassReverse http://localhost:5280{{ domain.conversejs.weblocation | default('/' + domain.name + '/conversejs') }}>
     </Location>
 
 {% endfor %}
+    <Directory /usr/local/conversejs>
+        Options +FollowSymlinks
+    </Directory>
+
     # OMEMO support library for Converse.js
     Alias /conversejs-libsignal-protocol-javascript /usr/local/conversejs/libsignal-protocol-javascript/dist
     <Location /conversejs-libsignal-protocol-javascript>

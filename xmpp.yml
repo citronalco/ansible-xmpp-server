@@ -3,12 +3,12 @@
 
   roles:
     - set_passwords
-    - journald
-    - certbot
+#    - journald
+#    - certbot
     - apache2
-    - coturn
-    - postgresql
-    - conversejs
+#    - coturn
+#    - postgresql
+#    - conversejs
     - prosody
-    - nrpe
-    - firewalld
+#    - nrpe
+#    - firewalld
