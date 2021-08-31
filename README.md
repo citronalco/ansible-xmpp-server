@@ -26,7 +26,8 @@ The configuration for `host_vars/xmpp.bytewerk.org` is used for a productive ser
 
 
 ### Usage:
-1. Install Ansible on your machine (e.g. on Suse: `zypper install ansible`, on Debian/Ubuntu/Mint: `apt-get install ansible`)
+1. Install Ansible on your machine (e.g. on Suse: `zypper install ansible`, on Debian/Ubuntu/Mint: `apt-get install ansible`)\
+Ansible >= 2.10 is required.
 1. Make sure you can log in on the server as root, without having to type in a password. (Use SSH Public Key authentication.)
 1. Rename the file `hosts.example` to `hosts`, edit it and set your server's hostname and IP address
 1. In directory `host_vars` rename the file `xmpp.example.com` to your server's hostname and set your preferences in that file
