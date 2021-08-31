@@ -90,14 +90,14 @@
 
 # PostgreSQL
 postgresql:
-  databasename: prosody				# optional, default: prosody
-  username: prosody				# optional, default: prosody
-  password: 5xyfqhtehvtBJMiQt4L90X2e		# optional, default: random
+  databasename: prosody                         # optional, default: prosody
+  username: prosody                             # optional, default: prosody
+  password: 5xyfqhtehvtBJMiQt4L90X2e            # optional, default: random
 
 
 # Coturn
 turnserver:
-  shared_password: kjhwef8721hkqhwdXXX		# optional, default: random
+  shared_password: kjhwef8721hkqhwdXXX          # optional, default: random
 
 
 # Prosody
@@ -110,8 +110,8 @@ prosody:
   # virtual host on this server offering BOSH, websockets, Converse.js and optionally a web site (see "content_git") for all xmpp_domains
   web_domain:
     name: "xmpp.example.com"
-    admin_email: "webmaster@example.com"	# mail address of webserver admin
-    content_git:				# optional. If you want https://xmpp.example.net display some content put that in a git repo and set it's URL below.
+    admin_email: "webmaster@example.com"        # mail address of webserver admin
+    content_git:                                # optional. If you want https://xmpp.example.net display some content put that in a git repo and set it's URL below.
       url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
       branch: master
 
@@ -119,43 +119,43 @@ prosody:
   xmpp_domains:
     - name: "foobar.org"
 
-      components:				# you need all four (muc, proxy65, upload, pubsub), and you need to set them up in DNS
+      components:                               # you need all four (muc, proxy65, upload, pubsub), and you need to set them up in DNS
         conference: "conference.foobar.org"
         proxy65: "proxy.foobar.org"
         upload: "upload.foobar.org"
         pubsub: "pubsub.foobar.org"
 
-      legacy_ssl_port: 5223			# port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
+      legacy_ssl_port: 5223                     # port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
-      authentication_provider: internal_hashed	# where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
-      allow_registration: invite		# possible values: true, false, invite (optional, default: false)
-    						#  true: allow anyone to register within a XMPP client
-    						#  false: users have to be created manually by the server admin with "prosodyctl adduser <JID>"
-    						#  invite: allow existing users to invite new users
-    						# no effect if "authentication_provider = imap", new users must be created on the IMAP server in that case
-      max_upload_mbyte: 1000			# max. file upload size in MByte (default: 100)
-      delete_uploads_after_days: 31		# delete uploaded files after XX days. (default: never)
-      delete_messages_after_days: 31		# delete archived messages after XX days. (default: never)
+      authentication_provider: internal_hashed  # where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
+      allow_registration: invite                # possible values: true, false, invite (optional, default: false)
+                                                #  true: allow anyone to register within a XMPP client
+                                                #  false: users have to be created manually by the server admin with "prosodyctl adduser <JID>"
+                                                #  invite: allow existing users to invite new users
+                                                # no effect if "authentication_provider = imap", new users must be created on the IMAP server in that case
+      max_upload_mbyte: 1000                    # max. file upload size in MByte (default: 100)
+      delete_uploads_after_days: 31             # delete uploaded files after XX days. (default: never)
+      delete_messages_after_days: 31            # delete archived messages after XX days. (default: never)
 
 
-      admin_jids:				# list of JIDs that should have admin access. (default: none)
+      admin_jids:                               # list of JIDs that should have admin access. (default: none)
         - admin@foobar.org
         - someone@otherexample.com
-      admin_group: "foobar admins"		# create a contact group called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
+      admin_group: "foobar admins"              # create a contact group called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
 
       conversejs:
-        auto_list_rooms: true			# automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
-        weblocation: /conversejs-foobar		# offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
-        auto_join_rooms:			# add everybody using Converse.js to this MUCs (default: empty)
+        auto_list_rooms: true                   # automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
+        weblocation: /conversejs-foobar         # offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
+        auto_join_rooms:                        # add everybody using Converse.js to this MUCs (default: empty)
           - club@conference.foobar.org
           - h4ck3r5@muc.bar.foo.com
-        community_plugins:			# enable some modules from https://github.com/conversejs/community-plugins (default: empty)
+        community_plugins:                      # enable some modules from https://github.com/conversejs/community-plugins (default: empty)
           - muc-directory
           - screencast
 
-      testuser:					# create a test user for NRPE (optional, default: do not create a test user)
-        name: "nrpe-testuser"			# test user's jid will be "nrpe-testuser@foobar.org"
-        password: "hkjwhd8u230wjl"		# optional, default: random
+      testuser:                                 # create a test user for NRPE (optional, default: do not create a test user)
+        name: "nrpe-testuser"                   # test user's jid will be "nrpe-testuser@foobar.org"
+        password: "hkjwhd8u230wjl"              # optional, default: random
 
     - name: "server.net"
 
@@ -167,7 +167,7 @@ prosody:
 
       legacy_ssl_port: 5225
 
-      authentication_provider: imap		# use the IMAP server configured above for user authentication
+      authentication_provider: imap             # use the IMAP server configured above for user authentication
 
       admin_jids:
         - admin@foobar.org
@@ -180,8 +180,8 @@ prosody:
 
 # Converse.js
 conversejs:
-  conversejs_release_tag: v6.0.1		# select a converse.js release (see tags on https://github.com/conversejs/converse.js/releases)
-  libsignal_release_tag: v1.3.0			# select a release of converse.js's OMEMO library (see tags von https://github.com/conversejs/libsignal-protocol-javascript/releases)
+  conversejs_release_tag: v6.0.1                # select a converse.js release (see tags on https://github.com/conversejs/converse.js/releases)
+  libsignal_release_tag: v1.3.0                 # select a release of converse.js's OMEMO library (see tags von https://github.com/conversejs/libsignal-protocol-javascript/releases)
 
 
 # NRPE
