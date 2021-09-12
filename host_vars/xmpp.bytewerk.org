@@ -8,7 +8,7 @@ prosody:
     name: "xmpp.bytewerk.org"
     admin_email: "webmaster@bingo-ev.de"
     content_git:                        # Webseite für "https://xmpp.bytewerk.org"
-      url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
+      url: http://git.bingo-ev.de/xmpp/bytewerk-xmpp-server-website.git
       branch: master
 
   xmpp_domains:
