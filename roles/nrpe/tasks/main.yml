@@ -1,6 +1,9 @@
 - name: Install nrpe service
   zypper:
-    name: "nrpe"
+    name: "{{ item }}"
+  loop:
+    - "nrpe"
+    - "monitoring-plugins-common"
 
 - name: Enable nrpe service
   systemd:
@@ -12,6 +15,12 @@
     path: "/usr/local/nrpe-plugins/"
     state: directory
     mode: "0755"
+
+- name: Link utils.sh
+  file:
+    src: "/usr/lib/nagios/plugins/utils.sh"
+    dest: "/usr/local/nrpe-plugins/utils.sh"
+    state: link
 
 - name: Install check_xmpp plugin
   copy:
