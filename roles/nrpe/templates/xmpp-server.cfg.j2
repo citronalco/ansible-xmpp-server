@@ -52,3 +52,8 @@ command[check_certificate_{{ prosody.web_domain.name }}]=/usr/lib/nagios/plugins
 {% for domain in prosody.xmpp_domains %}
 command[check_wellknown_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -H {{ domain.name }} --ssl -u /.well-known/host-meta.json -s http-bind
 {% endfor %}
+
+# converse.js
+{% for domain in prosody.xmpp_domains %}
+command[check_conversejs_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http --ssl -H {{ prosody.web_domain.name }} -u {{ domain.conversejs.weblocation }} -s converse.initialize
+{% endfor %}
