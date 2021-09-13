@@ -44,12 +44,26 @@
     group: "nagios"
     mode: "0775"
 
-- name: Install check_prosody plugin
+- name: Install check_postgres plugin
   copy:
     src: "check_postgres.pl"
     dest: "/usr/local/nrpe-plugins/check_postgres"
     group: "nagios"
     mode: "0775"
+
+- name: Install check_prosodyctl plugin
+  copy:
+    src: "check_prosodyctl"
+    dest: "/usr/local/nrpe-plugins/check_prosodyctl"
+    group: "nagios"
+    mode: "0775"
+
+- name: Install sudoers file
+  copy:
+    src: "sudoers"
+    dest: "/etc/sudoers.d/nrpe"
+    group: "root"
+    mode: "0440"
 
 - name: Install check_http plugin
   zypper:

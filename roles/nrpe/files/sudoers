@@ -1,0 +1,3 @@
+# Ansible managed
+nagios ALL=NOPASSWD: /usr/local/nrpe-plugins/check_prosodyctl 
+
