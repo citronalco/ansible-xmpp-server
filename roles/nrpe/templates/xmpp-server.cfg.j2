@@ -47,3 +47,8 @@ command[check_certificate_{{ domain.components[component] }}]=/usr/lib/nagios/pl
 
 # Certificate for web domain
 command[check_certificate_{{ prosody.web_domain.name }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ prosody.web_domain.name }}
+
+# .well-known URI
+{% for domain in prosody.xmpp_domains %}
+command[check_wellknown_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -H {{ domain.name }} --ssl -u /.well-known/host-meta.json -s http-bind
+{% endfor %}

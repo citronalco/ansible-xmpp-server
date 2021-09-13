@@ -90,6 +90,6 @@ nrpe:
   # list hostnames, IPv4 or IPv6 addresses allowed to query the nrpe server
   allowed_hosts:
     - www.geierb.de
-
+    - icinga-bytewerk.geierb.de
 
 ansible_python_interpreter: /usr/bin/python3
