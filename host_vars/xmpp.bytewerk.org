@@ -1,3 +1,5 @@
+# Übersicht und Erkärung der Variablen siehe xmpp.example.com!
+
 prosody:
   # IMAP-Server für die Authentifizierung der @bingo-ev.de-User
   imap_auth:
