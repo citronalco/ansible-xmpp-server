@@ -95,7 +95,7 @@ allow_user_invites = true; -- Allow non-admin users to invite contacts to regist
 -- mod_invites_page
 site_name = "{{ item.name }} Messenger Service"; -- The friendly name of this server (default: "example.com")
 -- mod_invites_register_web
-webchat_url = "https://{{ prosody.web_domain.name }}/{{ item.conversejs.weblocation }}"; -- External URL to converse.js (default: http_path of conversejs)
+webchat_url = "https://{{ prosody.web_domain.name }}/{{ item.conversejs.weblocation | default("conversejs-" + item.name) }}"; -- External URL to converse.js (default: http_path of conversejs)
 -- Change URLs for mod_invites to support multiple domains
 http_paths = {
 	register_apps = "/{{ item.name }}/register_apps";

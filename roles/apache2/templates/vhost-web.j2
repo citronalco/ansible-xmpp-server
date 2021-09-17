@@ -137,7 +137,7 @@
 
 {% for domain in prosody.xmpp_domains %}
     # {{ domain.name }} settings
-    <Location {{ domain.conversejs.weblocation }}>
+    <Location {{ domain.conversejs.weblocation | default("/conversejs-" + domain.name)}}>
         # Prosody serves Converse.js configurations on all its VirtualHosts with appropriate settings. Default is "localhost"
         # Setting "{{ domain.name }}" here switches to Converse.js configuration of Prosody's VirtualHost "{{ domain.name }}"
         # This allows using some convenience settings, like allowing users from @{{ domain.name }} to log in by just typing in their username instead of the full JID

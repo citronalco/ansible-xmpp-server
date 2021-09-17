@@ -5,17 +5,23 @@
 
 
 ##### EXAMPLE:
-# In this example we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains:
+# In this example configuration we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains.
+# "foobar.org" shows all possible configuration options, "server.net" is a minimal example.
+#
 # - foobar.org:
 #   Users can register with their XMPP client, open for anyone.
+#   conversejs is accessible via https://xmpp.example.com/conversejs-foobar
+#
 # - server.net:
 #   Restricted to users who already have an account on the IMAP server "mail.server.net".
 #   Valid IMAP users can immediatelly use the XMPP server, no extra registration required.
 #   (JIDs: <IMAP-username>@server.net, password: <IMAP-password>)
+#   conversejs is accessible via https://xmpp.example.com/conversejs-server.net
 #
 # "xmpp.example.com" will be used for BOSH, websockets, STUN/TURN server, Converse.js and a info web page - for both XMPP domains.
 #
 # The example server "xmpp.example.com" you're setting up has IPv4 12.34.56.78 and IPv6 2a02:1234:5678::72:1
+#
 #
 #### PREREQUISITES:
 # - TLS certificate and private key of foobar.org and server.net
@@ -90,14 +96,14 @@
 
 # PostgreSQL
 postgresql:
-  databasename: prosody                         # optional, default: prosody
-  username: prosody                             # optional, default: prosody
-  password: 5xyfqhtehvtBJMiQt4L90X2e            # optional, default: random
+  databasename: prosody                         # (default: prosody)
+  username: prosody                             # (default: prosody)
+  password: 5xyfqhtehvtBJMiQt4L90X2e            # (default: random)
 
 
 # Coturn
 turnserver:
-  shared_password: kjhwef8721hkqhwdXXX          # optional, default: random
+  shared_password: kjhwef8721hkqhwdXXX          # (default: random)
 
 
 # Prosody
@@ -111,7 +117,7 @@ prosody:
   web_domain:
     name: "xmpp.example.com"
     admin_email: "webmaster@example.com"        # mail address of webserver admin
-    content_git:                                # optional. If you want https://xmpp.example.net display some content put that in a git repo and set it's URL below.
+    content_git:                                # optional. If you want https://xmpp.example.net display some content, put that in a git repo and set it's URL below.
       url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
       branch: master
 
@@ -127,8 +133,8 @@ prosody:
 
       legacy_ssl_port: 5223                     # port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
-      authentication_provider: internal_hashed  # where to store user accounts (optional. possible values: internal_hashed, imap. default: internal_hashed)
-      allow_registration: invite                # possible values: true, false, invite (optional, default: false)
+      authentication_provider: internal_hashed  # where to store user accounts (possible values: internal_hashed, imap. default: internal_hashed)
+      allow_registration: invite                # possible values: true, false, invite (default: false)
                                                 #  true: allow anyone to register within a XMPP client
                                                 #  false: users have to be created manually by the server admin with "prosodyctl adduser <JID>"
                                                 #  invite: allow existing users to invite new users
@@ -141,12 +147,12 @@ prosody:
       admin_jids:                               # list of JIDs that should have admin access. (default: none)
         - admin@foobar.org
         - someone@otherexample.com
-      admin_group: "foobar admins"              # create a contact group called "foobar admins" and automatically put all "admin_jids" into it (optional, default: do not create a group)
+      admin_group: "foobar admins"              # create a contact group called "foobar admins" and automatically put all "admin_jids" into it (default: empty -> do not create a group)
 
       conversejs:
-        auto_list_rooms: true                   # automatically list all public chat rooms on this server, may take a while on crowded servers (optional, default: true)
-        weblocation: /conversejs-foobar         # offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar
-        auto_join_rooms:                        # add everybody using Converse.js to this MUCs (default: empty)
+        auto_list_rooms: true                   # automatically list all public chat rooms on this server, may take a while on crowded servers (default: true)
+        weblocation: /conversejs-foobar         # offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar (default: "/conversejs-foobar.org")
+        auto_join_rooms:                        # add everybody using Converse.js automatically to this MUCs (default: empty)
           - club@conference.foobar.org
           - h4ck3r5@muc.bar.foo.com
         community_plugins:                      # enable some modules from https://github.com/conversejs/community-plugins (default: empty)
@@ -167,14 +173,11 @@ prosody:
 
       legacy_ssl_port: 5225
 
-      authentication_provider: imap             # use the IMAP server configured above for user authentication
+      authentication_provider: imap             # use the IMAP server configured above for user authentication (possible values: internal_hashed, imap. default: internal_hashed)
 
       admin_jids:
         - admin@foobar.org
         - chef@server.net
-
-      conversejs:
-        weblocation: /conversejs-servernet
 
 
 
@@ -186,8 +189,7 @@ conversejs:
 
 # NRPE
 nrpe:
-  # list hostnames, IPv4 or IPv6 addresses allowed to query the nrpe server (optional, default: none)
-  allowed_hosts:
+  allowed_hosts:                                # list hostnames, IPv4 or IPv6 addresses allowed to query the nrpe server (default: none)
     - www.my-icinga2-server.at
     - 23.45.67.89
 
