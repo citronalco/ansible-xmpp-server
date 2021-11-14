@@ -1,8 +1,8 @@
 # Install Prosody
-- name: Set up repository devel-lua for PostgreSQL support
+- name: Set up repository devel-lua for package lua51-luadbi with PostgreSQL support
   zypper_repository:
     name: "devel_languages_lua"
-    repo: 'https://download.opensuse.org/repositories/devel:/languages:/lua/{{ ansible_distribution | replace(" ", "_") }}_{{ ansible_distribution_version }}/'
+    repo: 'https://download.opensuse.org/repositories/devel:/languages:/lua/{{ ansible_distribution_version }}/'
     auto_import_keys: yes
     runrefresh: yes
 
@@ -10,10 +10,10 @@
   zypper:
     name: "{{ item }}"
   loop:
-    - prosody
-    - lua51-luadbi
-    - lua51-luaevent
-    - telnet
+    - "prosody"
+    - "devel_languages_lua:lua51-luadbi"
+    - "lua51-luaevent"
+    - "telnet"
 
 - name: Create directory for systemd service override
   file:
