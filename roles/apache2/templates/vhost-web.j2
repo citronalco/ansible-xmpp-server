@@ -125,15 +125,18 @@
     #### CONVERSE.JS ####
     ### Set up Converse.js infrastructure for Prosody's mod_conversejs
 
+    <Directory /usr/local/conversejs>
+        Options +FollowSymlinks
+    </Directory>
+
     ## css and js files
     <Location /conversejs>
         ProxyPass http://localhost:5280/conversejs
         ProxyPassReverse http://localhost:5280/conversejs
     </Location>
 
-    <Directory /usr/local/conversejs>
-        Options +FollowSymlinks
-    </Directory>
+    # Favicon
+    Alias /favicon.ico /usr/local/conversejs/conversejs/package/dist/images/favicon.ico
 
 {% for domain in prosody.xmpp_domains %}
     # {{ domain.name }} settings
