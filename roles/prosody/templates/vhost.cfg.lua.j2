@@ -108,16 +108,18 @@ http_paths = {
 ------ Components ------
 --- Set up a MUC (multi-user chat) room server: [XEP-0045]
 Component "{{ item.components.muc }}" "muc"
-	restrict_room_creation = "local"; -- Only users from this domain can create rooms (default: false)
+	-- restrict_room_creation = "local"; -- Only users from this domain can create rooms (default: false)
 	modules_enabled = {
 	    "muc_limits"; -- Limit max. event rate in a MUC room
 	    "muc_mam"; -- Enable archiving of MUC messages
 	    "vcard_muc"; -- Enable vCards for MUC rooms (i.e. set an avatar for a MUC)
+	    "muc_badge"; -- Offer SVG images with current user count for every room via https://{{ item.components.muc }}/muc_badge/ROOM-JID
 	    -- "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
 	}
 	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
-	muc_room_default_history_length = 200 ; -- Keep the last 200 messages by default (default: 20)
-	max_history_messages = 200; -- Room can be configured to keep at max 200 messages (default: 20)
+	muc_log_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived MUC messages after XXX days (default: 7d)
+	max_history_messages = 5000; -- Room can be configured to keep at max 5000 messages (default: 1000)
+	muc_room_default_history_length = 5000 ; -- Keep the last 5000 messages by default (default: 20)
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000

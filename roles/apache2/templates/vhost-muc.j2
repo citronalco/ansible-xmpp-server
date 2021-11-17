@@ -47,6 +47,14 @@
     SSLCertificateKeyFile /etc/letsencrypt/live/{{ domain[item] }}/privkey.pem
     Include /etc/apache2/letsencrypt-ssl-apache.conf
 
+    # Prosody mod_muc_badge
+    <Location /muc_badge>
+	ProxyPreserveHost on
+	RequestHeader set Host "{{ domain[item] }}"
+	ProxyPass http://localhost:5280/muc_badge
+	ProxyPassReverse http://localhost:5280/muc_badge
+    </Location>
+
     # Redirect to info page
     Redirect 301 / https://{{ prosody.web_domain.name }}/
 </VirtualHost>
