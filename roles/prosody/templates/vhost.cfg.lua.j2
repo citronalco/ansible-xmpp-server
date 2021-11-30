@@ -114,6 +114,7 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_mam"; -- Enable archiving of MUC messages
 	    "vcard_muc"; -- Enable vCards for MUC rooms (i.e. set an avatar for a MUC)
 	    "muc_badge"; -- Offer SVG images with current user count for every room via https://{{ item.components.muc }}/muc_badge/ROOM-JID
+            "muc_mention_notifications"; -- Notify users when they're mentioned in a MUC, even if they're not currently present in it
 	    -- "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
 	}
 	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
