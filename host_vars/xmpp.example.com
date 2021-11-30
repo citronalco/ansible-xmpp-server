@@ -149,12 +149,13 @@ prosody:
         - someone@otherexample.com
       admin_group: "foobar admins"              # create a contact group called "foobar admins" and automatically put all "admin_jids" into it (default: empty -> do not create a group)
 
+      default_bookmarks:                        # add this MUCs to new users' bookmarks (default: none)
+        "The Club": club@conference.foobar.org
+        "H4CK3R5": h4ck3r5@muc.bar.foo.com
+
       conversejs:
         auto_list_rooms: true                   # automatically list all public chat rooms on this server, may take a while on crowded servers (default: true)
         weblocation: /conversejs-foobar         # offer Converse.js for foobar.org in https://xmpp.example.com/conversejs-foobar (default: "/conversejs-foobar.org")
-        auto_join_rooms:                        # add everybody using Converse.js automatically to this MUCs (default: empty)
-          - club@conference.foobar.org
-          - h4ck3r5@muc.bar.foo.com
         community_plugins:                      # enable some modules from https://github.com/conversejs/community-plugins (default: empty)
           - muc-directory
           - screencast

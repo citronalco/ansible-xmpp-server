@@ -38,11 +38,12 @@ prosody:
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
 
+      default_bookmarks:
+        "bingo Users": bingo-users@conference.bingo-ev.de
+        "Bytewerk": bytewerk@conference.bytewerk.org
+
       conversejs:
         weblocation: /conversejs-bytewerk
-        auto_join_rooms:
-          - bingo-users@conference.bingo-ev.de
-          - bytewerk@conference.bytewerk.org
         community_plugins:
           - muc-directory               # MUC-Verzeichnis
           - screencast                  # Bildschirmfreigabe
@@ -62,7 +63,7 @@ prosody:
       legacy_ssl_port: 5225
 
       authentication_provider: imap
-      allow_registration: false         # Da "authentication_provider: imap" kann sich sowieo kein neuer User per XMPP registrieren, müssen auf Mailserver angelegt werden
+      allow_registration: false         # Da "authentication_provider: imap" gesetzt ist kann sich sowieo kein neuer User per XMPP registrieren. User müssen auf Bingo-Mailserver angelegt werden
 
       max_upload_mbyte: 100
 
@@ -75,10 +76,11 @@ prosody:
         - geierb@jabber.geierb.de
         - bg3992@bingo-ev.de
 
+      default_bookmarks:
+        "Bytewerk": bytewerk@conference.bytewerk.org
+
       conversejs:
         weblocation: /conversejs-bingo
-        auto_join_rooms:
-          - bingo-users@conference.bingo-ev.de
         community_plugins:
           - muc-directory               # MUC-Verzeichnis
 
