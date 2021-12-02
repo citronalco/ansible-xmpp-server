@@ -135,8 +135,8 @@
         ProxyPassReverse http://localhost:5280/conversejs
     </Location>
 
-    # Favicon
-    Alias /favicon.ico /usr/local/conversejs/conversejs/package/dist/images/favicon.ico
+    # Use Converse.js logo as default favicon
+    #Alias /favicon.ico /usr/local/conversejs/conversejs/package/dist/images/favicon.ico
 
 {% for domain in prosody.xmpp_domains %}
     # {{ domain.name }} settings
