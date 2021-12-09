@@ -123,13 +123,14 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_mam"; -- Enable archiving of MUC messages
 	    "vcard_muc"; -- Enable vCards for MUC rooms (i.e. set an avatar for a MUC)
 	    "muc_badge"; -- Offer SVG images with current user count for every room via https://{{ item.components.muc }}/muc_badge/ROOM-JID
-            "muc_mention_notifications"; -- Notify users when they're mentioned in a MUC, even if they're not currently present in it
-	    -- "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
+	    "muc_mention_notifications"; -- Notify users when they're mentioned in a MUC, even if they're not currently present in it
+	    "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
 	}
 	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
 	muc_log_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived MUC messages after XXX days (default: 7d)
 	max_history_messages = 5000; -- Room can be configured to keep at max 5000 messages (default: 1000)
-	muc_room_default_history_length = 5000 ; -- Keep the last 5000 messages by default (default: 20)
+	muc_room_default_history_length = 5000 ; -- By default keep the last 5000 messages (default: 20)
+	muc_room_default_persistent = true; -- By default keep empty rooms (default: false)
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
