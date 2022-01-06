@@ -27,7 +27,7 @@
 - name: Add certbot cronjob
   cron:
     name: "Renew LetsEncrypt Certificates, check weekly. After renewal scripts in /etc/letsencrypt/renewal-hooks/post get executed to enable the new certs in Apache2, Coturn and Prosody"
-    job: "/usr/bin/certbot renew"
+    job: "/usr/bin/certbot renew --quiet"
     minute: "10"
     hour: "1"
     weekday: "0"
