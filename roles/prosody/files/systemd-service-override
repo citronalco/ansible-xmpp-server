@@ -5,4 +5,4 @@ After=network-online.target postgresql.service
 Requires=network-online.target
 
 [Service]
-LimitNOFILE=1M
+LimitNOFILE=1048576
