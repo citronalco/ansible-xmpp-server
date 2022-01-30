@@ -6,3 +6,4 @@ Requires=network-online.target
 
 [Service]
 LimitNOFILE=1048576
+Restart=on-failure
