@@ -184,7 +184,7 @@ prosody:
 
 # Converse.js
 conversejs:
-  conversejs_release_tag: v6.0.1                # select a converse.js release (see tags on https://github.com/conversejs/converse.js/releases)
+  conversejs_release_tag: v9.0.0                # select a converse.js release (see tags on https://github.com/conversejs/converse.js/releases)
   libsignal_release_tag: v1.3.0                 # select a release of converse.js's OMEMO library (see tags von https://github.com/conversejs/libsignal-protocol-javascript/releases)
 
 

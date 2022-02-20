@@ -67,6 +67,7 @@ conversejs_options = {
 {% if item.conversejs.community_plugins is defined %}
 	whitelisted_plugins = { {{ item.conversejs.community_plugins | default([]) | map("to_json") | join(", ") }} }; -- Enable community modules
 {% endif %}
+	muc_clear_messages_on_leave = false; -- Do not clear all cached messages when leaving a MUC (default: true)
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
