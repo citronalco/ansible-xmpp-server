@@ -126,12 +126,17 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_badge"; -- Offer SVG images with current user count for every room via https://{{ item.components.muc }}/muc_badge/ROOM-JID
 	    "muc_mention_notifications"; -- Notify users when they're mentioned in a MUC, even if they're not currently present in it
 	    "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
+	    -- "bob"; -- Cache bits of binary on MUC services (incompatible with Prosody 0.11)
+	    -- "muc_offline_delivery"; -- Support for sending messages in a MUC to affiliated users who are not in the room (requires Prosody 0.12)
 	}
-	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
-	muc_log_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived MUC messages after XXX days (default: 7d)
 	max_history_messages = 5000; -- Room can be configured to keep at max 5000 messages (default: 1000)
 	muc_room_default_history_length = 5000 ; -- By default keep the last 5000 messages (default: 20)
 	muc_room_default_persistent = true; -- By default keep empty rooms (default: false)
+	-- muc_mam:
+	muc_log_by_default = true; -- Enable conversation logging by default (can be disabled in room config)
+	muc_log_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived MUC messages after XXX days (default: 7d)
+	-- muc_limits:
+	muc_max_nick_length = 64; -- Maximum allowed length of user nicknames (default: 32)
 
 -- Set up a SOCKS5 bytestream proxy for server-proxied file transfers:
 -- Listens on port 5000
