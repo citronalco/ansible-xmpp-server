@@ -26,7 +26,7 @@ admins = { }
 
 -- Enable use of libevent for better performance under high load
 -- For more information see: https://prosody.im/doc/libevent
-use_libevent = true
+network_backend = "event"
 
 -- Prosody will always look in its source directory for modules, but
 -- this option allows you to specify additional locations where Prosody
@@ -104,24 +104,21 @@ modules_enabled = {
 
 	-- Client State Indicators
 		"csi"; -- Client state indication [XEP-0352]
-		"csi_battery_saver"; -- Don't send unimportant stanzas (presence, typing,...) imediatelly to inactice devices [XEP-0085]
+		"csi_simple"; -- Don't send unimportant stanzas (presence, typing,...) imediatelly to inactice devices [XEP-0085]
 		"lastactivity"; -- Allows users to query how long another user has been idle [XEP-0012]
 		"presence_cache"; -- stores a timestamp of the latest presence received from users contacts
 		"idlecompat"; -- Idle indication for some clients [XEP-0319]
 
 	-- Stream management
 		"smacks"; -- Stream Management to survive small network outages without losing messages [XEP-0198]
-		"bidi"; -- Allow single, bidirectional connection to servers  [XEP-0288]
 		"s2s_auth_compat"; -- Support s2s authentication with slightly broken servers (e.g. OpenFire 3.8). See https://prosody.im/doc/certificates#server-to-server_encryption_issues
+		"s2s_bidi"; -- Bi-directional server-to-server connections [XEP-0288]
 
-	-- WebRTC/Jingle - Needs hint to TURN/STUN server. Either use "turncredentials" or "extdisco" & "external_services"
-		-- "turncredentials";
-		"extdisco"; -- [XEP-0215]
-		"external_services"; -- Inform clients about our STUN+TURN server (depends on mod_extdisco, can be omitted with Prosody <= 0.12)
+	-- WebRTC/Jingle - Needs hint to TURN/STUN server.
+		"turn_external"; -- Inform clients about our STUN+TURN server
 
 	-- Converse.js
 		"conversejs"; -- Serve a small HTML snippet in http://<virtualhost>:5280/conversejs
-
 }
 
 -- These modules are auto-loaded, but should you want
@@ -130,7 +127,6 @@ modules_disabled = {
 	-- "offline"; -- Store offline messages
 	-- "c2s"; -- Handle client connections
 	-- "s2s"; -- Handle server-to-server connections
-	"websocket"; -- As of 2021/08 Conversejs/Prosody fail to keep the websocket open, which leads to a silent disconnect of Conversejs after some minutes (similar to https://github.com/conversejs/converse.js/issues/1727)
 }
 
 
@@ -155,36 +151,18 @@ limit_auth_period = 15; -- within 15 seconds...
 limit_auth_max = 5; -- ...tolerate no more than 5 failed authentication attempts
 
 -- WebRTC/Jingle support:
-external_services = {
-	{
-	    type = "stun",
-	    host = "{{ prosody.web_domain.name }}",
-	    transport = "udp",
-	    port = 3478
-	},
-	{
-	    type = "turn",
-	    host = "{{ prosody.web_domain.name }}",
-	    transport = "udp",
-	    port = 3478,
-	    secret = "{{ turnpwd }}"
-	},
-	{
-	    type = "turns",
-	    host = "{{ prosody.web_domain.name }}",
-	    transport = "tcp",
-	    port = 5349,
-	    secret = "{{ turnpwd }}"
-	}
-}
+turn_external_host = "{{ prosody.web_domain.name }}";
+turn_external_port = 3478;
+turn_external_secret = "{{ turnpwd }}";
+turn_external_tcp = true;
+turn_external_tls_port = 5349;
+
 
 -- mod_bosh: listens on /http-bind
 -- bosh_max_inactivity = 60; -- Maximum amount of time in seconds a client may remain silent for, with no requests, before getting kicked (default: 60)
-cross_domain_bosh = true; -- CORS header for BOSH (either list of domains or "true" for *) (default: hostname or, if, set, host in "http_external_url")
 consider_bosh_secure = true; -- Allow operations requiring encryption over plain HTTP (i.e. when using a reverse proxy for HTTPS) (default: false)
 
 -- mod_websocket: listens on /xmpp-websocket
-cross_domain_websocket = true; -- CORS header for websocket (either list of domains or "true" for *) (default: hostname or, if, set, host in "http_external_url")
 consider_websocket_secure = true; -- Allow operations requiring encryption over plain HTTP (i.e. when using a reverse proxy for HTTPS) (default: false)
 
 -- mod_http: HTTPS is done by an Apache2 reverse proxy, so Prosody's HTTPS server can be disabled and HTTP limited to localhost
@@ -248,10 +226,10 @@ allow_registration = false
 c2s_require_encryption = true
 
 -- Allow legacy SSL for older clients [XEP-0368] - must also be set in DNS SRV records
-legacy_ssl_ports = { {{ prosody.xmpp_domains | map(attribute='legacy_ssl_port') | list | join(", ") }} };
+c2s_direct_tls_ports = { {{ prosody.xmpp_domains | map(attribute='legacy_ssl_port') | list | join(", ") }} };
 
 -- certificates for legacy_ssl_ports (default: cert from "ssl" option)
-legacy_ssl_ssl = {
+c2s_direct_tls_ssl = {
 {% for domain in prosody.xmpp_domains %}
 	[{{ domain.legacy_ssl_port }}] = {
 	    key = "/etc/prosody/certs/{{ domain.name }}/privkey.pem";

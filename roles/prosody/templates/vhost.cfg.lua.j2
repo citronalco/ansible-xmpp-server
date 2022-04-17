@@ -127,7 +127,9 @@ Component "{{ item.components.muc }}" "muc"
 	    "muc_mention_notifications"; -- Notify users when they're mentioned in a MUC, even if they're not currently present in it
 	    "muc_moderation"; -- Enables a role "moderator" in MUCs (requires mod_muc_mam) [XEP-0425]
 	    -- "bob"; -- Cache bits of binary on MUC services (incompatible with Prosody 0.11)
-	    -- "muc_offline_delivery"; -- Support for sending messages in a MUC to affiliated users who are not in the room (requires Prosody 0.12)
+	    "muc_offline_delivery"; -- Support for sending messages in a MUC to affiliated users who are not in the room
+	    "muc_markers"; -- Add internal API to retrieve the last displayed message by MUC occupants
+	    "muc_rai"; -- Check for MUC activity without joining (requires mod_muc_markers) [XEP-xxx: Room Activity Indicators]
 	}
 	max_history_messages = 5000; -- Room can be configured to keep at max 5000 messages (default: 1000)
 	muc_room_default_history_length = 5000 ; -- By default keep the last 5000 messages (default: 20)
