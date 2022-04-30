@@ -15,7 +15,6 @@
     - "lua53-luaevent"
     - "lua53-luaunbound"
     - "lua53-luareadline"
-    - "telnet"
 
 - name: Create directory for systemd service override
   file:
