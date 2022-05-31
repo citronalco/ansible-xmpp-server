@@ -72,7 +72,7 @@
     repo: "https://github.com/DigitaleGesellschaft/Anonip.git"
     dest: "/usr/local/Anonip.git"
     clone: yes
-    update: yes
+    version: master
   notify: restart apache2
   tags:
     - skip_ansible_lint
