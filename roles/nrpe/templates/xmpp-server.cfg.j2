@@ -38,7 +38,7 @@ command[check_prosodyctl]=sudo /usr/local/nrpe-plugins/check_prosodyctl
 
 # Certificates for legacy SSL
 {% for domain in prosody.xmpp_domains %}
-command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -C 13,6 --sni --ssl -H {{ prosody.web_domain.name }} -p {{ domain.legacy_ssl_port }}
+command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -C 13,6 --ssl -H {{ prosody.web_domain.name }} -p {{ domain.legacy_ssl_port }}
 {% endfor %}
 
 # Certificates for Prosody components
