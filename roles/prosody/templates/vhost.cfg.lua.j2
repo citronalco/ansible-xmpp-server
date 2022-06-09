@@ -26,6 +26,9 @@ authentication = "{{ item.authentication_provider | default("internal_hashed") }
 -- Allow new users to register from within their XMPP client (does not work with external authentication providers like imap) [XEP-0077] (default: false)
 -- If mod_invites is loaded registrations are restricted to users with invitations from existing users
 allow_registration = {{ (item.allow_registration == true or item.allow_registration == "invite") | ternary('true', 'false') if item.allow_registration is defined else 'false' }}
+{% if item.allow_registration is defined and item.allow_registration == 'invite' %}
+registration_invite_only = true; -- Enable registration only for users that have a valid invite token
+{% endif %}
 
 -- Archiving configuration
 archive_expires_after = "{{ (item.delete_messages_after_days | string() + "d") if item.delete_messages_after_days is defined else "never" }}"; -- Remove archived messages after XXX days (default: 7d)
