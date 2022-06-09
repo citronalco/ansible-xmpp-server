@@ -18,7 +18,7 @@ command[check_service_coturn]=/usr/local/nrpe-plugins/check_systemd_service cotu
 command[check_service_apache2]=/usr/local/nrpe-plugins/check_systemd_service apache2
 
 # Processes
-command[check_proc_prosody]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C prosody
+command[check_proc_prosody]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "bin/prosody -D" 
 command[check_proc_postgresql]=/usr/lib/nagios/plugins/check_procs -c 1:1 -a "postgres: {{ postgresql.databasename | default('prosody') }}"
 command[check_proc_coturn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -C turnserver
 command[check_proc_apache2]=/usr/lib/nagios/plugins/check_procs -c 1: -C httpd-prefork
