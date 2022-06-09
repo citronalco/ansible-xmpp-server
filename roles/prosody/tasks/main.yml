@@ -7,14 +7,18 @@
     runrefresh: yes
 
 - name: Install Prosody
+  # Prosody supports lua 5.3
+  # for an unknown reason it still defaults to lua 5.1
   zypper:
     name: "{{ item }}"
   loop:
-    - "prosody"
+    - "devel_languages_lua:prosody"
     - "devel_languages_lua:lua53-luadbi"
     - "lua53-luaevent"
     - "lua53-luaunbound"
-    - "lua53-luareadline"
+    - "devel_languages_lua:lua51-luadbi"
+    - "lua51-luaevent"
+    - "lua51-luaunbound"
 
 - name: Create directory for systemd service override
   file:
