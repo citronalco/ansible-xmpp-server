@@ -229,7 +229,7 @@ c2s_require_encryption = true
 -- Allow legacy SSL for older clients [XEP-0368] - must also be set in DNS SRV records
 c2s_direct_tls_ports = { {{ prosody.xmpp_domains | map(attribute='legacy_ssl_port') | list | join(", ") }} };
 
--- certificates for legacy_ssl_ports (default: cert from "ssl" option)
+-- certificates for c2s_direct_tls_ports (default: cert from "ssl" option)
 c2s_direct_tls_ssl = {
 {% for domain in prosody.xmpp_domains %}
 	[{{ domain.legacy_ssl_port }}] = {
