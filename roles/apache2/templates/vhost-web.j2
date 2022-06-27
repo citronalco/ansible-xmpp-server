@@ -56,8 +56,8 @@
     UseCanonicalName Off
 
     # LetsEncrypt
-    SSLCertificateFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/privkey.pem
+    SSLCertificateFile /var/lib/dehydrated/certs/{{ prosody.web_domain.name }}/fullchain.pem
+    SSLCertificateKeyFile /var/lib/dehydrated/certs/{{ prosody.web_domain.name }}/privkey.pem
     Include /etc/apache2/letsencrypt-ssl-apache.conf
 
     ###############################

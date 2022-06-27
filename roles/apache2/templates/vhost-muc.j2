@@ -43,8 +43,8 @@
     UseCanonicalName Off
 
     # LetsEncrypt
-    SSLCertificateFile /etc/letsencrypt/live/{{ domain[item] }}/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/{{ domain[item] }}/privkey.pem
+    SSLCertificateFile /var/lib/dehydrated/certs/{{ domain[item] }}/fullchain.pem
+    SSLCertificateKeyFile /var/lib/dehydrated/certs/{{ domain[item] }}/privkey.pem
     Include /etc/apache2/letsencrypt-ssl-apache.conf
 
     # Prosody mod_muc_badge

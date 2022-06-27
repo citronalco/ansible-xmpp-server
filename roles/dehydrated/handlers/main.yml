@@ -1,0 +1,3 @@
+- name: post renewal hook
+  command:
+    cmd: /etc/dehydrated/post_renewal.sh

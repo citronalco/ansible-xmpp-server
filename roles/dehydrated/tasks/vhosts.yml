@@ -1,0 +1,6 @@
+- name: Generate certificates
+  command: /usr/bin/dehydrated --agree-tos --email {{ prosody.web_domain.admin_email }} --domain {{ domain[item] }} --algo rsa
+  args:
+    creates: /var/lib/dehydrated/certs/{{ domain[item] }}/cert.pem
+  loop: "{{ domain | list }}"
+  notify: post renewal hook

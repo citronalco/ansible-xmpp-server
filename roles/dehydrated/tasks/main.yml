@@ -1,0 +1,31 @@
+- name: Install dehydrated
+  zypper:
+    name: [ "dehydrated", "dehydrated-apache2" ]
+
+- name: Copy hook file
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/dehydrated/{{ item }}"
+    mode: "0770"
+  loop:
+    - post_renewal.sh
+
+- name: Create renewal script
+  template:
+    src: renewal.sh.j2
+    dest: /etc/dehydrated/renewal.sh
+    mode: "0775"
+
+- name: Add cronjob for renewal script
+  cron:
+    name: "Renew LetsEncrypt Certificates, check weekly. After renewal scripts in /etc/letsencrypt/renewal-hooks/post get executed to enable the new certs in Apache2, Coturn and Prosody"
+    job: "/etc/dehydrated/renewal.sh"
+    minute: "10"
+    hour: "1"
+    weekday: "0"
+
+- name: Create certificates for XMPP components
+  include_tasks: vhosts.yml
+  loop: "{{ prosody.xmpp_domains | map(attribute='components') }}"
+  loop_control:
+    loop_var: domain

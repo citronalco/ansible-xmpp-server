@@ -4,7 +4,7 @@
   roles:
     - set_passwords
     - journald
-    - certbot
+    - dehydrated
     - apache2
     - coturn
     - postgresql

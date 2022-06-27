@@ -5,7 +5,7 @@
 
 
 ##### EXAMPLE:
-# In this example configuration we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains.
+# In this example configuration we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains, "foobar.org" and "server.net"
 # "foobar.org" shows all possible configuration options, "server.net" is a minimal example.
 #
 # - foobar.org:
