@@ -152,7 +152,7 @@ limit_auth_period = 15; -- within 15 seconds...
 limit_auth_max = 5; -- ...tolerate no more than 5 failed authentication attempts
 
 -- WebRTC/Jingle support:
-turn_external_host = "{{ prosody.web_domain.name }}";
+turn_external_host = "{{ prosody.web_domain.name | default(inventory_hostname) }}";
 turn_external_port = 3478;
 turn_external_secret = "{{ turnpwd }}";
 turn_external_tcp = true;
@@ -167,7 +167,7 @@ consider_bosh_secure = true; -- Allow operations requiring encryption over plain
 consider_websocket_secure = true; -- Allow operations requiring encryption over plain HTTP (i.e. when using a reverse proxy for HTTPS) (default: false)
 
 -- mod_http: HTTPS is done by an Apache2 reverse proxy, so Prosody's HTTPS server can be disabled and HTTP limited to localhost
-http_external_url = "https://{{ prosody.web_domain.name }}"; -- Promote all HTTP(S) services using this base URL
+http_external_url = "https://{{ prosody.web_domain.name | default(inventory_hostname) }}"; -- Promote all HTTP(S) services using this base URL
 http_interfaces = { "127.0.0.1", "::1" }; -- Only listen for HTTP requests on localhost on port 5280 (default: { "*", "::" })
 https_interfaces = { }; -- Do not listen for HTTPS requests on any interface on port 5281 - this disables Prosody's HTTPS server (default: { "*", "::" })
 

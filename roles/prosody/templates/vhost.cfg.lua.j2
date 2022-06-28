@@ -17,7 +17,7 @@ groups_file = "/etc/prosody/sharedGroups-{{ item.name }}.txt"
 contact_info = {
 	abuse = { {{ item.admin_jids | default([]) | map('regex_replace', '^', 'xmpp:') | map("to_json") | join(", ") }} },
 	admin = { {{ item.admin_jids | default([]) | map('regex_replace', '^', 'xmpp:') | map("to_json") | join(", ") }} },
-	support = { "https://{{ prosody.web_domain.name }}/" }
+	support = { "https://{{ prosody.web_domain.name | default(inventory_hostname) }}/" }
 };
 
 -- Authentication method (default: internal_hashed)
@@ -74,13 +74,13 @@ conversejs_options = {
 }
 conversejs_tags = {
 	-- Load libsignal-protocol.js for OMEMO support (GPLv3; be aware of licence implications)
-	[[<script src="https://{{ prosody.web_domain.name }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
+	[[<script src="https://{{ prosody.web_domain.name | default(inventory_hostname)  }}/conversejs-libsignal-protocol-javascript/libsignal-protocol.js"></script>]];
 {% if item.conversejs.community_plugins is defined %}
 
 	-- Load community plugins
 {% for plugin in item.conversejs.community_plugins %}
-	[[<script src="https://{{ prosody.web_domain.name }}/packages/{{ plugin }}/{{ plugin }}.js"></script>]];
-	[[<link type="text/css" rel="stylesheet" media="screen" href="https://{{ prosody.web_domain.name }}/packages//{{ plugin }}/{{ plugin }}.css" />]];
+	[[<script src="https://{{ prosody.web_domain.name | default(inventory_hostname) }}/packages/{{ plugin }}/{{ plugin }}.js"></script>]];
+	[[<link type="text/css" rel="stylesheet" media="screen" href="https://{{ prosody.web_domain.name | default(inventory_hostname) }}/packages//{{ plugin }}/{{ plugin }}.css" />]];
 {% endfor %}
 {% endif %}
 }
@@ -108,7 +108,7 @@ allow_user_invites = true; -- Allow non-admin users to invite contacts to regist
 -- mod_invites_page
 site_name = "{{ item.name }} Messenger Service"; -- The friendly name of this server (default: "example.com")
 -- mod_invites_register_web
-webchat_url = "https://{{ prosody.web_domain.name }}/{{ item.conversejs.weblocation | default("conversejs-" + item.name) }}"; -- External URL to converse.js (default: http_path of conversejs)
+webchat_url = "https://{{ prosody.web_domain.name | default(inventory_hostname) }}/{{ item.conversejs.weblocation | default("conversejs-" + item.name) }}"; -- External URL to converse.js (default: http_path of conversejs)
 -- Change URLs for mod_invites to support multiple domains
 http_paths = {
 	register_apps = "/{{ item.name }}/register_apps";

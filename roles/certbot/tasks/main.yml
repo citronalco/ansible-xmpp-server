@@ -1,6 +1,32 @@
-- name: Install Certbot
+- name: Remove distribution Certbot
   zypper:
-    name: "python3-certbot-apache"
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - python3-certbot-apache
+    - python3-certbot
+
+- name: Set up repository snappy repository
+  zypper_repository:
+    name: "snappy"
+    repo: 'https://download.opensuse.org/repositories/system:snappy/openSUSE_Leap_{{ ansible_distribution_version }}/'
+    auto_import_keys: yes
+    runrefresh: yes
+
+- name: Install snapd
+  zypper:
+    name: "snapd"
+
+- name: Ensure snapd is running
+  systemd:
+    name: snapd
+    state: started
+    enabled: yes
+
+- name: Install certbot
+  snap:
+    classic: yes
+    name: certbot
 
 - name: Create certificates for XMPP components
   include_tasks: vhosts.yml
@@ -27,7 +53,7 @@
 - name: Add certbot cronjob
   cron:
     name: "Renew LetsEncrypt Certificates, check weekly. After renewal scripts in /etc/letsencrypt/renewal-hooks/post get executed to enable the new certs in Apache2, Coturn and Prosody"
-    job: "/usr/bin/certbot renew --quiet"
+    job: "/snap/bin/certbot renew --quiet"
     minute: "10"
     hour: "1"
     weekday: "0"

@@ -1,21 +1,21 @@
 # {{ ansible_managed }}
 # Required for:
-# - maintaining Prosody's LetsEncrypt certificate {{ prosody.web_domain.name }}
-# - reverse proxy for BOSH (URL: https://{{ prosody.web_domain.name }}/http-bind)
+# - maintaining Prosody's LetsEncrypt certificate {{ prosody.web_domain.name | default(inventory_hostname) }}
+# - reverse proxy for BOSH (URL: https://{{ prosody.web_domain.name | default(inventory_hostname) }}/http-bind)
 # - reverse proxy for BOSH-Autoconfiguration (XEP-0156)
-# - reverse proxy for Websocket (URL: https://{{ prosody.web_domain.name }}/xmpp-websocket)
+# - reverse proxy for Websocket (URL: https://{{ prosody.web_domain.name | default(inventory_hostname) }}/xmpp-websocket)
 # - reverse proxy for Prosody's invite based user registration
 
 <VirtualHost *:80>
-    ServerName {{ prosody.web_domain.name }}
+    ServerName {{ prosody.web_domain.name | default(inventory_hostname) }}
 
     ServerAdmin {{ prosody.web_domain.admin_email }}
 
-    DocumentRoot /srv/var/www/vhosts/{{ prosody.web_domain.name }}
+    DocumentRoot /srv/var/www/vhosts/{{ prosody.web_domain.name | default(inventory_hostname) }}
 
     # Logging
-    ErrorLog /var/log/apache2/{{ prosody.web_domain.name }}-error_log
-    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ prosody.web_domain.name }}-access_log" combined env=!dontlog
+    ErrorLog /var/log/apache2/{{ prosody.web_domain.name | default(inventory_hostname) }}-error_log
+    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ prosody.web_domain.name | default(inventory_hostname) }}-access_log" combined env=!dontlog
 
     # Don't loose time with IP address lookups
     HostnameLookups Off
@@ -36,18 +36,18 @@
 
 
 <VirtualHost *:443>
-    ServerName {{ prosody.web_domain.name }}
+    ServerName {{ prosody.web_domain.name | default(inventory_hostname) }}
 
     ServerAdmin {{ prosody.web_domain.admin_email }}
 
-    DocumentRoot /srv/var/www/vhosts/{{ prosody.web_domain.name }}
+    DocumentRoot /srv/var/www/vhosts/{{ prosody.web_domain.name | default(inventory_hostname) }}
 
     # Enable HTTP/2, if available
     Protocols h2 http/1.1
 
     # Logging
-    ErrorLog /var/log/apache2/{{ prosody.web_domain.name }}-error_log
-    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ prosody.web_domain.name }}-access_log" combined env=!dontlog
+    ErrorLog /var/log/apache2/{{ prosody.web_domain.name | default(inventory_hostname) }}-error_log
+    CustomLog "|/usr/bin/python3 /usr/local/Anonip.git/anonip.py --skip-private --output /var/log/apache2/{{ prosody.web_domain.name | default(inventory_hostname) }}-access_log" combined env=!dontlog
 
     # Don't loose time with IP address lookups
     HostnameLookups Off
@@ -56,8 +56,8 @@
     UseCanonicalName Off
 
     # LetsEncrypt
-    SSLCertificateFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/{{ prosody.web_domain.name }}/privkey.pem
+    SSLCertificateFile /etc/letsencrypt/live/{{ prosody.web_domain.name | default(inventory_hostname) }}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ prosody.web_domain.name | default(inventory_hostname) }}/privkey.pem
     Include /etc/apache2/letsencrypt-ssl-apache.conf
 
     ###############################

@@ -5,18 +5,18 @@
 
 
 ##### EXAMPLE:
-# In this example configuration we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains.
-# "foobar.org" shows all possible configuration options, "server.net" is a minimal example.
-#
-# - foobar.org:
-#   Users can register with their XMPP client, open for anyone.
-#   conversejs is accessible via https://xmpp.example.com/conversejs-foobar
+# In this example configuration we're setting up a XMPP server named "xmpp.example.com" that serves two XMPP domains:
+# "server.net" is a minimal example, "foobar.org" shows all possible configuration options.
 #
 # - server.net:
+#   Users can register with their XMPP client, open for anyone.
+#   conversejs is accessible via https://xmpp.example.com/conversejs-server.net
+#
+# - foobar.org:
 #   Restricted to users who already have an account on the IMAP server "mail.server.net".
 #   Valid IMAP users can immediatelly use the XMPP server, no extra registration required.
 #   (JIDs: <IMAP-username>@server.net, password: <IMAP-password>)
-#   conversejs is accessible via https://xmpp.example.com/conversejs-server.net
+#   conversejs is accessible via https://xmpp.example.com/conversejs-foobar
 #
 # "xmpp.example.com" will be used for BOSH, websockets, STUN/TURN server, Converse.js and a info web page - for both XMPP domains.
 #
@@ -115,7 +115,7 @@ prosody:
 
   # virtual host on this server offering BOSH, websockets, Converse.js and optionally a web site (see "content_git") for all xmpp_domains
   web_domain:
-    name: "xmpp.example.com"
+    name: "xmpp.example.com"                    # (default: the server's hostname)
     admin_email: "webmaster@example.com"        # mail address of webserver admin
     content_git:                                # optional. If you want https://xmpp.example.net display some content, put that in a git repo and set it's URL below.
       url: http://git.bingo-ev.de/geierb/bytewerk-xmpp-server-website.git
@@ -123,9 +123,32 @@ prosody:
 
   # list here your XMPP domains
   xmpp_domains:
+    # Minimal example
+    - name: "server.net"
+
+      # Components                               # you need all four (muc, proxy65, upload, pubsub), and you need to create A records in DNS pointing to this server
+      muc: "conference.server.net"
+      proxy65: "proxy65.server.net"
+      uploads: "upload.server.net"
+      pubsub: "pubsub.server.net"
+
+      legacy_ssl_port: 5225
+
+      authentication_provider: internal_hashed  # where to store user accounts (possible values: internal_hashed, imap. default: internal_hashed)
+      allow_registration: true                  # possible values: true, false, invite (default: false)
+                                                #   - true: allow anyone to register within a XMPP client
+                                                #   - false: all users have to be created manually by the server admin with "prosodyctl adduser <JID>"
+                                                #   - invite: allow existing users to invite new users
+                                                # no effect if "authentication_provider = imap", new users must be created on the IMAP server in that case
+
+      admin_jids:
+        - admin@foobar.org
+        - chef@server.net
+
+    # More sophisticated example
     - name: "foobar.org"
 
-      components:                               # you need all four (muc, proxy65, upload, pubsub), and you need to set them up in DNS
+      components:                               # you need all four (muc, proxy65, upload, pubsub), and you need to create A records in DNS pointing to this server
         conference: "conference.foobar.org"
         proxy65: "proxy.foobar.org"
         upload: "upload.foobar.org"
@@ -133,12 +156,7 @@ prosody:
 
       legacy_ssl_port: 5223                     # port for "legacy SSL" connections, must be listed in DNS and not be shared with other XMPP domains
 
-      authentication_provider: internal_hashed  # where to store user accounts (possible values: internal_hashed, imap. default: internal_hashed)
-      allow_registration: invite                # possible values: true, false, invite (default: false)
-                                                #  true: allow anyone to register within a XMPP client
-                                                #  false: users have to be created manually by the server admin with "prosodyctl adduser <JID>"
-                                                #  invite: allow existing users to invite new users
-                                                # no effect if "authentication_provider = imap", new users must be created on the IMAP server in that case
+      authentication_provider: imap             # use the IMAP server configured above for user authentication (possible values: internal_hashed, imap. default: internal_hashed)
       max_upload_mbyte: 1000                    # max. file upload size in MByte (default: 100)
       delete_uploads_after_days: 31             # delete uploaded files after XX days. (default: never)
       delete_messages_after_days: 31            # delete archived messages after XX days. (default: never)
@@ -163,22 +181,6 @@ prosody:
       testuser:                                 # create a test user for NRPE (optional, default: do not create a test user)
         name: "nrpe-testuser"                   # test user's jid will be "nrpe-testuser@foobar.org"
         password: "hkjwhd8u230wjl"              # optional, default: random
-
-    - name: "server.net"
-
-      # Components
-      muc: "conference.server.net"
-      proxy65: "proxy65.server.net"
-      uploads: "upload.server.net"
-      pubsub: "pubsub.server.net"
-
-      legacy_ssl_port: 5225
-
-      authentication_provider: imap             # use the IMAP server configured above for user authentication (possible values: internal_hashed, imap. default: internal_hashed)
-
-      admin_jids:
-        - admin@foobar.org
-        - chef@server.net
 
 
 

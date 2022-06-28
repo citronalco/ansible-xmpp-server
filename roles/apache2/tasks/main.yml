@@ -51,7 +51,7 @@
 - name: Create common web vHost configuration
   template:
     src: "vhost-web.j2"
-    dest: "/etc/apache2/vhosts.d/{{ prosody.web_domain.name }}.conf"
+    dest: "/etc/apache2/vhosts.d/{{ prosody.web_domain.name | default(inventory_hostname) }}.conf"
     mode: "0644"
   notify: restart apache2
 
@@ -72,7 +72,7 @@
     repo: "https://github.com/DigitaleGesellschaft/Anonip.git"
     dest: "/usr/local/Anonip.git"
     clone: yes
-    version: master
+    version: main
   notify: restart apache2
   tags:
     - skip_ansible_lint
@@ -88,7 +88,7 @@
   git:
     repo: "{{ prosody.web_domain.content_git.url }}"
     version: "{{ prosody.web_domain.content_git.branch | default('master') }}"
-    dest: "/srv/var/www/vhosts/{{ prosody.web_domain.name }}/"
+    dest: "/srv/var/www/vhosts/{{ prosody.web_domain.name | default(inventory_hostname) }}/"
     clone: yes
     update: yes
   tags:

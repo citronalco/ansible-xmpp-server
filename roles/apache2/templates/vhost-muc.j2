@@ -56,5 +56,5 @@
     </Location>
 
     # Redirect to info page
-    Redirect 301 / https://{{ prosody.web_domain.name }}/
+    Redirect 301 / https://{{ prosody.web_domain.name | default(inventory_hostname) }}/
 </VirtualHost>

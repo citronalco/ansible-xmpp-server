@@ -21,7 +21,7 @@ The configuration for `host_vars/xmpp.bytewerk.org` is used for a productive ser
 
 
 ### Requirements:
-* Server running openSUSE Leap 15.2 or 15.3 with a fixed IPv4 address
+* Server running openSUSE Leap 15.2, 15.3, 15.4 with a fixed IPv4 address
 * A domain name, and you are able to edit its nameserver entries
 
 
@@ -30,6 +30,9 @@ The configuration for `host_vars/xmpp.bytewerk.org` is used for a productive ser
 Ansible >= 2.10 is required.
 1. Make sure you can log in on the server as root, without having to type in a password. (Use SSH Public Key authentication.)
 1. Rename the file `hosts.example` to `hosts`, edit it and set your server's hostname and IP address
-1. In directory `host_vars` rename the file `xmpp.example.com` to your server's hostname and set your preferences in that file
+1. In directory `host_vars` rename the file `xmpp.example.com` to your server's hostname, set your preferences in that file and create the required DNS entries as shown in that file.
 1. Execute `ansible-playbook -i hosts xmpp.yml` to start the installation.\
 You can use the option  `--diff` to see in detail what Ansible does on your server, and/or `--check` for a dry-run.
+
+#### Final step:
+Copy the TLS certificate and keys for each XMPP domain(s) into /etc/prosody/certs/<domainname/ (cert file: "fullchain.pem", key file: "privkey.pem") and restart Prosody with `systemctl restart prosody`

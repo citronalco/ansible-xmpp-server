@@ -1,8 +1,8 @@
 - name: Check if certificates do already exist
   stat:
-    path: /etc/letsencrypt/live/{{ domain[item] }}/cert.pem
+    path: /etc/letsencrypt/live/{{ item }}/cert.pem
   register: letsencrypt_cert_stat
-  loop: "{{ domain | list }}"
+  loop: "{{ domain | dict2items | map(attribute='value') + [ prosody.web_domain.name | default(inventory_hostname) ] }}"
 
 - name: Stop Apache2 to allow certbot to generate a cert
   service:
@@ -10,9 +10,12 @@
     state: stopped
   when: not ansible_check_mode and letsencrypt_cert_stat.results | selectattr('stat.exists','equalto', false) | list | count > 0
   notify: restart apache2
+  register: apache2_service_result
+  failed_when: "apache2_service_result is failed and 'Could not find the requested service' not in apache2_service_result.msg"
 
 - name: Generate new certificate
-  command: /usr/bin/certbot certonly --standalone --noninteractive --agree-tos --email {{ prosody.web_domain.admin_email }} -d {{ domain[item] }}
+  command: /snap/bin/certbot certonly --standalone --noninteractive --agree-tos --email {{ prosody.web_domain.admin_email }} -d {{ item }}
   args:
-    creates: /etc/letsencrypt/live/{{ domain[item] }}/cert.pem
-  loop: "{{ domain | list }}"
+    creates: /etc/letsencrypt/live/{{ item }}/cert.pem
+  loop: "{{ domain | dict2items | map(attribute='value') + [ prosody.web_domain.name | default(inventory_hostname) ] }}"
+

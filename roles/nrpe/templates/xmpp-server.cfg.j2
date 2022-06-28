@@ -38,7 +38,7 @@ command[check_prosodyctl]=sudo /usr/local/nrpe-plugins/check_prosodyctl
 
 # Certificates for legacy SSL
 {% for domain in prosody.xmpp_domains %}
-command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -C 13,6 --ssl -H {{ prosody.web_domain.name }} -p {{ domain.legacy_ssl_port }}
+command[check_certificate_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -C 13,6 --ssl -H {{ prosody.web_domain.name | default(inventory_hostname) }} -p {{ domain.legacy_ssl_port }}
 {% endfor %}
 
 # Certificates for Prosody components
@@ -49,7 +49,7 @@ command[check_certificate_{{ domain.components[component] }}]=/usr/lib/nagios/pl
 {% endfor %}
 
 # Certificate for web domain
-command[check_certificate_{{ prosody.web_domain.name }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ prosody.web_domain.name }}
+command[check_certificate_{{ prosody.web_domain.name | default(inventory_hostname) }}]=/usr/lib/nagios/plugins/check_http -C 21,7 --sni --ssl -H {{ prosody.web_domain.name | default(inventory_hostname) }}
 
 # .well-known URI
 {% for domain in prosody.xmpp_domains %}
@@ -58,5 +58,5 @@ command[check_wellknown_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http -H
 
 # converse.js
 {% for domain in prosody.xmpp_domains %}
-command[check_conversejs_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http --ssl -H {{ prosody.web_domain.name }} -u {{ domain.conversejs.weblocation | default("/conversejs-" + domain.name) }} -s converse.initialize
+command[check_conversejs_{{ domain.name }}]=/usr/lib/nagios/plugins/check_http --ssl -H {{ prosody.web_domain.name | default(inventory_hostname) }} -u {{ domain.conversejs.weblocation | default("/conversejs-" + domain.name) }} -s converse.initialize
 {% endfor %}

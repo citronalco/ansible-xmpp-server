@@ -4,6 +4,7 @@
   roles:
     - set_passwords
     - journald
+    - firewalld
     - certbot
     - apache2
     - coturn
@@ -11,4 +12,3 @@
     - conversejs
     - prosody
     - nrpe
-    - firewalld
