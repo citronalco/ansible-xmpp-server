@@ -20,6 +20,22 @@
     - "lua51-luaunbound"
     - "devel_languages_lua:prosody"
 
+- name: Install dependencies for building luaossl
+  zypper:
+    name: "{{ item }}"
+  loop:
+    - "lua51-luarocks"
+    - "lua51-devel"
+    - "libopenssl-1_1-devel"
+    - "gcc"
+
+- name: Build luaossl
+  # as Suse still uses OpenSSL 1.1, an older luossl version is required
+  # CFLAGS are required due to Suse's backports in OpenSSL
+  command: luarocks-5.1 install luaossl 20200709-0 CFLAGS="-O2 -fPIC -DHAVE_EVP_KDF_CTX=1"
+  args:
+    creates: "/usr/lib/luarocks/rocks-5.1/luaossl/20200709-0/luaossl-20200709-0.rockspec"
+
 - name: Create directory for systemd service override
   file:
     path: "/etc/systemd/system/prosody.service.d"
